@@ -52,13 +52,25 @@ def clonar(version: VersionCorpus) -> None:
             "Revisalo y borralo a mano si corresponde."
         )
 
-    info(f"{version.proyecto} {version.version}: descargando {version.tag} ({version.commit[:12]})")
-    destino.mkdir(parents=True, exist_ok=True)
-    git("init", "--quiet", cwd=destino)
-    git("remote", "add", "origin", version.url_git, cwd=destino)
+    if (destino / ".git").exists():
+        # Hay un .git sin HEAD: una descarga anterior se cortó a mitad de camino.
+        # Se retoma sobre la misma carpeta en lugar de empezar de cero.
+        info(f"{version.proyecto} {version.version}: retomando una descarga incompleta")
+        remotos = git("remote", cwd=destino).split()
+        if "origin" in remotos:
+            git("remote", "set-url", "origin", version.url_git, cwd=destino)
+        else:
+            git("remote", "add", "origin", version.url_git, cwd=destino)
+    else:
+        info(f"{version.proyecto} {version.version}: descargando {version.tag} ({version.commit[:12]})")
+        destino.mkdir(parents=True, exist_ok=True)
+        git("init", "--quiet", cwd=destino)
+        git("remote", "add", "origin", version.url_git, cwd=destino)
+
     # GitHub permite pedir un commit puntual por su hash.
     git("fetch", "--quiet", "--depth", "1", "origin", version.commit, cwd=destino)
-    git("-c", "advice.detachedHead=false", "checkout", "--quiet", "FETCH_HEAD", cwd=destino)
+    # --force: si el checkout anterior quedó a medias, se pisan los archivos sueltos.
+    git("-c", "advice.detachedHead=false", "checkout", "--quiet", "--force", "FETCH_HEAD", cwd=destino)
 
     obtenido = git("rev-parse", "HEAD", cwd=destino)
     if obtenido != version.commit:
