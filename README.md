@@ -62,12 +62,12 @@ python guiones/clonar_corpus.py
 python guiones/compilar_corpus.py
 ```
 
-Resultado en `datos/compilacion.csv`.
+Resultado en `datos/compilacion.csv`, que se actualiza al terminar cada versión. Algunos tests fallan por el entorno y no por el código (ver la sección de SCRUM-22 en [docs/pruebas-tecnicas.md](docs/pruebas-tecnicas.md)). No lances análisis mientras corre: `analizar.py` hace `mvn clean` sobre los mismos checkouts y comparte la caché de Maven.
 
 **6. Prueba técnica 1 (SCRUM-21).** Analiza jsoup bajo una clave de prueba, exporta las medidas por archivo y los issues, y verifica los supuestos del eje 1:
 
 ```
-python guiones/analizar.py jsoup 1.23.2 --clave prueba-pt1-jsoup
+python guiones/analizar.py jsoup 1.23.2 --clave prueba-pt1-jsoup --sin-tests
 python guiones/exportar_medidas.py prueba-pt1-jsoup
 python guiones/verificar_supuestos.py prueba-pt1-jsoup
 ```
@@ -88,6 +88,7 @@ docker compose -f laboratorio/docker-compose.yml --env-file laboratorio/.env dow
 * **SonarQube no arranca y el log habla de `vm.max_map_count`.** El `docker-compose.yml` ya desactiva el requisito. Si igual aparece, en Windows correr `wsl -d docker-desktop -u root sysctl -w vm.max_map_count=524288` y volver a levantar.
 * **SonarQube se reinicia solo o queda muy lento.** Le falta memoria: subirla en Docker Desktop, en Settings, Resources.
 * **`preparar_sonarqube.py` no puede autenticarse.** Si cambiaste la contraseña de `admin` a mano, escribila en `SONAR_ADMIN_CLAVE` de `laboratorio/.env`.
+* **Fallan tests de permisos o de red.** Es esperable: el contenedor de herramientas corre como root, que ignora los permisos de archivo, y algunos tests dependen de sitios externos. No afecta el análisis estático. Detalle en la sección de SCRUM-22 de [docs/pruebas-tecnicas.md](docs/pruebas-tecnicas.md).
 * **Un build falla.** El log completo está en `trabajo/logs/`. El guion ya desactiva los plugins de verificación propios de cada proyecto que no tienen que ver con el estudio (licencias, compatibilidad binaria, estilo).
 
 ## Reglas del laboratorio

@@ -4,6 +4,8 @@ Las cuatro pruebas confirman, antes de comprometernos con un diseño, que el lab
 
 Estado al 2026-10-12: el laboratorio y los guiones están listos; ninguna prueba se corrió todavía.
 
+**Cuándo se corren los tests (decidido el 2026-10-12).** `analizar.py` compila de nuevo en cada análisis y, por defecto, corre todos los tests. Los tests solo hacen falta para medir cobertura, así que se usa `--sin-tests` en las pruebas 1, 2 y 3 y en los análisis `extraccion-*`. La prueba 4 y los análisis principales `corpus-*` se corren con tests y `--jacoco` (decisión D2 bis). `--sin-tests` pasa `-DskipTests=true`, que compila los tests pero no los ejecuta: SonarQube sigue analizando el código de test con sus clases compiladas, y lo único que falta es la cobertura. En commons-io los tests tardan unos 11 minutos.
+
 ## Prueba técnica 1: punta a punta y medidas por archivo (SCRUM-21)
 
 **Qué confirma.** Que SonarQube levanta, que un proyecto del corpus se analiza completo y que se pueden exportar por la API, para cada archivo, las medidas del eje 1. Además verifica cuatro supuestos:
@@ -51,14 +53,16 @@ python guiones/complejidad_por_metodo.py exportar jsoup
 **Cómo se corre.** Primero el release viejo y después el nuevo, bajo una clave de prueba:
 
 ```
-python guiones/analizar.py jsoup 1.22.2 --clave prueba-pt3-jsoup
-python guiones/analizar.py jsoup 1.23.2 --clave prueba-pt3-jsoup
+python guiones/analizar.py jsoup 1.22.2 --clave prueba-pt3-jsoup --sin-tests
+python guiones/analizar.py jsoup 1.23.2 --clave prueba-pt3-jsoup --sin-tests
 python guiones/exportar_medidas.py prueba-pt3-jsoup
 ```
 
 Luego comparar las métricas de código nuevo (`new_lines`, `new_violations`) con el cambio real entre los dos tags. Si no lo reflejan, repetir con una clave nueva fechando el primer análisis hacia atrás con `--fecha`.
 
-**A tener en cuenta.** La definición de código nuevo por defecto es "versión anterior", que se apoya en `sonar.projectVersion`; el guion la completa con la versión del corpus. Desde la versión 26.9, SonarQube fecha cada issue según el último cambio de la línea en git: como los checkouts no traen historia (`--depth 1`), hay que ver cómo afecta eso a la detección de código nuevo.
+**A tener en cuenta.** Al correr sin tests no hay cobertura, así que la condición "cobertura del código nuevo de al menos 80 %" va a fallar o quedar sin evaluar. No es un resultado: esta prueba mira si se detecta el código nuevo, no si el gate aprueba. La cobertura se prueba en la 4.
+
+La definición de código nuevo por defecto es "versión anterior", que se apoya en `sonar.projectVersion`; el guion la completa con la versión del corpus. Desde la versión 26.9, SonarQube fecha cada issue según el último cambio de la línea en git: como los checkouts no traen historia (`--depth 1`), hay que ver cómo afecta eso a la detección de código nuevo.
 
 **Plan B.** Un solo commit por proyecto y un gate propio con las mismas condiciones aplicadas a todo el código, declarado como limitación.
 
@@ -80,3 +84,22 @@ python guiones/exportar_medidas.py prueba-pt4-jsoup
 La opción `--jacoco` agrega el agente de JaCoCo y el reporte XML desde la línea de comandos. Verificar que la columna `coverage` de `medidas_archivo.csv` tiene valores. En Commons IO, revisar en el log que el agente no quede declarado dos veces (el proyecto ya lo configura).
 
 **Resultados.** Pendiente.
+
+## Compilación del corpus (SCRUM-22)
+
+**Qué confirma.** Que las ocho versiones del corpus compilan sin intervención manual (criterio 2 de D3) y cuántos tests tiene cada una. Se corre una sola vez, salvo que cambie el corpus o la versión de Maven o del JDK.
+
+**Cómo se corre.** Paso 5 del README. Resultado en `datos/compilacion.csv` y logs en `trabajo/logs/`.
+
+**Fallas de tests por el entorno.** Algunos tests fallan en el laboratorio por cómo está armado el entorno, no por el código del proyecto. No afectan el análisis estático, que es lo que usan los tres ejes, y casi no mueven la cobertura (un test que falla en una aserción igual ejecutó el código hasta ese punto). Se decidió documentarlas y no cambiar el contenedor (2026-10-12). Al revisar `compilacion.csv`, cada falla se clasifica como "de entorno" o "a investigar".
+
+| Proyecto y versión | Tests que fallan | Causa |
+| --- | --- | --- |
+| commons-io 2.21.0 | `FileFilterTest.testCanRead`, `testCanWrite`; `FileUtilsCleanDirectoryTest.testThrowsOnNullList`; `FileUtilsDeleteDirectoryLinuxTest.testThrowsOnNullList`, `testThrowsOnCannotDeleteFile`; `FileUtilsTest.testForceDeleteReadOnlyFile`, `testCopyFileToReadOnlyDirectory`, `testForceDeleteUnwritableFile` y los tres `*_IOExceptionOnPosixFileSystem` (11 fallas) | Permisos. Los tests le quitan un permiso a un archivo y esperan que la operación falle, pero la imagen `maven:3.10.0-eclipse-temurin-21` corre como root, que ignora los permisos. No es el montaje de Windows: esos archivos están en `/tmp` del contenedor |
+| commons-io 2.21.0 | `URIOriginTest.testGetInputStream` [1] y [2] (2 errores) | Red. El test descarga `http://www.apache.com/`, un sitio externo que no es de Apache y que respondió HTTP 500 por http y un certificado que no coincide por https |
+
+En commons-io 2.21.0 son 13 de 6.106 tests (0,2 %); además hay 26 omitidos por el propio proyecto. Las demás versiones se agregan cuando termine la corrida.
+
+**Otros hallazgos.** commons-io 2.21.0 compiló en 12:37 min, de los cuales unos 11 fueron tests. Usa JaCoCo 0.8.14, la que fija su POM padre, no la 0.8.15 de `VERSIONES.md`. Revisar en la prueba 4 si `--jacoco` impone la 0.8.15.
+
+**Resultados.** Corrida iniciada el 2026-10-12; pendiente el CSV completo.

@@ -350,7 +350,9 @@ def correr_en_herramientas(
 
     ruta_log.parent.mkdir(parents=True, exist_ok=True)
     inicio = time.monotonic()
-    with ruta_log.open("w", encoding="utf-8") as log:
+    # buffering=1: el log se vuelca línea por línea, así se puede seguir en vivo
+    # (con el buffer por defecto de 8 KB quedaba atrasado respecto de la consola).
+    with ruta_log.open("w", encoding="utf-8", buffering=1) as log:
         proceso = subprocess.Popen(
             comando_compose(*argumentos),
             stdout=subprocess.PIPE,

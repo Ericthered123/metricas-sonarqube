@@ -12,7 +12,7 @@ Una fila por versión del corpus. Lo genera `compilar_corpus.py`.
 | `jdk`, `maven` | Versiones usadas por el contenedor de herramientas |
 | `resultado` | `ok` si `mvn verify` terminó bien; si no, el código de salida |
 | `duracion_s` | Duración del build en segundos |
-| `tests`, `fallas`, `errores`, `omitidos` | Totales de los reportes de Surefire |
+| `tests`, `fallas`, `errores`, `omitidos` | Totales de los reportes de Surefire. Describen el build en este entorno, no la calidad del proyecto: algunos tests fallan por el entorno (contenedor como root, sitios externos). Ver la sección de SCRUM-22 en `docs/pruebas-tecnicas.md` |
 | `fecha`, `log` | Momento de la corrida y nombre del log en `trabajo/logs/` |
 
 ## `datos/registro_analisis.csv`

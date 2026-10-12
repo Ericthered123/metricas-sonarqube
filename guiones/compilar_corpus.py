@@ -11,6 +11,12 @@ es si el proyecto se puede analizar y con qué cobertura de tests.
 
 Resultado: ``datos/compilacion.csv`` con una fila por versión, y el log
 completo de cada build en ``trabajo/logs/compilacion-<proyecto>-<version>.log``.
+El CSV se reescribe al terminar cada versión: si la corrida se corta, las
+versiones ya compiladas quedan registradas.
+
+Las columnas ``fallas`` y ``errores`` describen el build en este entorno, no la
+calidad del proyecto: hay tests que fallan por el entorno (ver
+``docs/pruebas-tecnicas.md``, sección de SCRUM-22).
 
 Uso:
     python guiones/compilar_corpus.py
@@ -133,8 +139,8 @@ def main() -> None:
 
     for version in versiones:
         previas[(version.proyecto, version.version)] = compilar(version, jdk, maven, args.sin_tests)
-
-    escribir_csv(ARCHIVO_RESULTADO, list(previas.values()), COLUMNAS)
+        # Se guarda después de cada versión para no perder lo hecho si se corta la corrida.
+        escribir_csv(ARCHIVO_RESULTADO, list(previas.values()), COLUMNAS)
 
 
 if __name__ == "__main__":
