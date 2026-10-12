@@ -1,0 +1,9 @@
+# Fin de línea LF en el repositorio para todo archivo de texto, se trabaje en
+# Windows, Linux o macOS. Evita diffs falsos entre integrantes.
+* text=auto eol=lf
+
+# Los scripts de PowerShell se guardan con CRLF, que es lo que espera Windows.
+*.ps1 text eol=crlf
+
+*.png binary
+*.pdf binary

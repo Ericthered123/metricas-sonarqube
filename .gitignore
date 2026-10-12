@@ -1,0 +1,17 @@
+# Configuración local con credenciales de cada instancia de SonarQube
+laboratorio/.env
+
+# Checkouts del corpus y logs de compilación y análisis (se regeneran con los guiones)
+trabajo/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Editores y sistema operativo
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

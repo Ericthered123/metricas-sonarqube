@@ -1,0 +1,9 @@
+proyecto,version,orden,repositorio,tag,commit
+commons-io,2.21.0,1,apache/commons-io,rel/commons-io-2.21.0,54073d3b5fdd2985b98a48040ede95eb59c7ee53
+commons-io,2.22.0,2,apache/commons-io,rel/commons-io-2.22.0,c14acc16f73e44a75b2062b17aacb26c4feda746
+commons-collections,4.5.0,1,apache/commons-collections,rel/commons-collections-4.5.0,7f7fb0244abc940a2e9dd28b67508c0483a58c3e
+commons-collections,4.6.0,2,apache/commons-collections,rel/commons-collections-4.6.0,4107624de41aeed37985d2a069fad41992fd71a2
+jsoup,1.22.2,1,jhy/jsoup,jsoup-1.22.2,ac28afe6e5bf96d39fd17c3e0a797a7585e1958c
+jsoup,1.23.2,2,jhy/jsoup,jsoup-1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300
+jfreechart,1.5.5,1,jfree/jfreechart,v1.5.5,cb8ff67d983bdee23f690851277e9d4bf10171d4
+jfreechart,1.5.6,2,jfree/jfreechart,v1.5.6,703427c2acf05f59a3660e03d1207b7ddc057412
