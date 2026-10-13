@@ -131,9 +131,10 @@ Tres conclusiones. La primera: el hallazgo de la cognitiva no medida queda confi
 python guiones/analizar.py jsoup 1.22.2 --clave prueba-pt3-jsoup --sin-tests
 python guiones/analizar.py jsoup 1.23.2 --clave prueba-pt3-jsoup --sin-tests
 python guiones/exportar_medidas.py prueba-pt3-jsoup
+python guiones/diff_releases.py jsoup --comparar prueba-pt3-jsoup
 ```
 
-Luego comparar las métricas de código nuevo (`new_lines`, `new_violations`) con el cambio real entre los dos tags. Si no lo reflejan, repetir con una clave nueva fechando el primer análisis hacia atrás con `--fecha`.
+`exportar_medidas.py` exporta las métricas de código nuevo (`codigo_nuevo_archivo.csv`) y marca qué issues están en código nuevo. `diff_releases.py` calcula el cambio real entre los dos tags con `git diff --no-index` y lo cruza con lo que informó SonarQube. Las dos cosas se agregaron para esta prueba (ver el diccionario de datos). Si no lo reflejan, repetir con una clave nueva fechando el primer análisis hacia atrás con `--fecha`.
 
 **A tener en cuenta.** Al correr sin tests no hay cobertura, así que la condición "cobertura del código nuevo de al menos 80 %" va a fallar o quedar sin evaluar. No es un resultado: esta prueba mira si se detecta el código nuevo, no si el gate aprueba. La cobertura se prueba en la 4.
 
@@ -141,7 +142,26 @@ La definición de código nuevo por defecto es "versión anterior", que se apoya
 
 **Plan B.** Un solo commit por proyecto y un gate propio con las mismas condiciones aplicadas a todo el código, declarado como limitación.
 
-**Resultados.** Pendiente.
+**Resultados (2026-10-13).** D2 confirmada: el código nuevo es la diferencia entre los dos releases, aun sin historia de git. No hace falta el plan B ni fechar análisis con `--fecha`.
+
+Corrida: jsoup 1.22.2 y 1.23.2 bajo `prueba-pt3-jsoup`, sin tests. Período informado por la API: `PREVIOUS_VERSION`, parámetro `1.22.2`, desde la fecha del primer análisis (también es el criterio por defecto de la instancia). Referencia independiente: `diff_releases.py`, con `git diff --no-index` entre los checkouts. Datos en `datos/prueba-pt3-jsoup/` y `datos/diff-jsoup/`.
+
+1. **Archivos.** De los 95 archivos Java principales que informa SonarQube, los 44 que cambiaron según git tienen `new_lines > 0` y los 51 que no cambiaron tienen 0. Ningún falso positivo ni falso negativo.
+2. **Líneas.** `new_lines` suma 2.455 en el código principal; git da 2.485 líneas agregadas. La diferencia se explica por dos cosas:
+   * SonarQube compara las líneas sin tener en cuenta los espacios. Con `git diff -w`, 39 de los 40 archivos modificados que informa coinciden exactamente (2.127 contra 2.126 líneas). La excepción es `W3CDom.java` (215 contra 214), atribuible a que los dos algoritmos de diff alinean distinto un bloque.
+   * En los 4 archivos nuevos SonarQube cuenta una línea más que git: cuenta como línea lo que sigue al último salto de línea, igual que en la métrica `lines`.
+   * Como `new_lines` incluye líneas en blanco y comentarios (2.455, contra unas 1.943 líneas de código según la aproximación de `agregadas_codigo`), mide líneas físicas y no `ncloc`.
+3. **Mecanismo (inferido, no documentado).** El análisis advierte "Shallow clone detected, no blame information will be provided". Sin blame, la coincidencia con `git diff -w` indica que SonarQube detecta las líneas cambiadas comparando cada archivo con el que guardó en el análisis anterior, línea por línea y sin espacios. No encontramos documentación oficial que lo describa; queda como inferencia apoyada en estos datos.
+4. **Issues.** 55 issues abiertos: 52 con fecha del primer análisis y 3 con fecha del segundo, que son los 3 de `new_violations` (`codigo_nuevo = sí` en `issues.csv`). Sin blame, la fecha de un issue es la del análisis que lo detectó por primera vez, y el seguimiento entre análisis no confundió issues viejos con nuevos. Los 3: `java:S8786` en `HttpConnection.java` y dos `java:S2259` en `HtmlTreeBuilder.java`.
+5. **Gate.** Rechazado por `new_violations` = 3 (umbral 0) y `new_coverage` = 0,0 (umbral 80, esperable sin tests). `new_duplicated_lines_density` = 0,0, aprobado.
+
+**Hallazgos laterales que afectan a otras decisiones.**
+
+* **Taxonomías distintas en el código nuevo (eje 1).** `java:S8786` es `CODE_SMELL` en el modo estándar y tiene impacto `RELIABILITY` en el modo MQR. Por eso el código nuevo tiene 1 code smell y 20 min de deuda en el modo estándar, y 0 issues y 0 min de mantenibilidad en el modo MQR. Hay que tenerlo en cuenta al decidir el modelo de deuda del eje 1.
+* **`new_lines` del proyecto no es la suma de los archivos principales.** El proyecto informa 5.325: incluye los tests y el `pom.xml` (87 líneas, que coinciden con git). `codigo_nuevo_archivo.csv`, igual que `medidas_archivo.csv`, solo trae archivos principales (calificador `FIL`), así que lo de los tests no se puede verificar archivo por archivo. La estimación con git (unas 2.842 líneas) no cierra exacto contra el resto (2.783). Para el eje 3 conviene usar las medidas por archivo o las condiciones del gate, no `new_lines` del proyecto.
+* **`src/main/java11/` no se analiza.** jsoup tiene ahí una variante de `HttpClientExecutor.java` para Java 11 (cambió entre los releases) y SonarQube no la informa. Pasa igual en los dos análisis, así que no sesga la comparación: se declara como alcance.
+* **Dos defectos de los guiones, corregidos.** `analizar.py` marcaba como falla un análisis publicado con el gate rechazado, porque buscaba un mensaje que el escáner de Maven 5.x ya no imprime. `exportar_medidas.py` no exportaba ninguna métrica de código nuevo, porque la API las devuelve en `period` y no en `value`.
+* **Persistencia del laboratorio, corregida.** El `docker-compose.yml` no montaba el volumen de datos de PostgreSQL: cada `down` + `up` arrancaba con una base vacía. Corregido y verificado con un reinicio (ver el comentario en el servicio `db` y el README).
 
 ## Prueba técnica 4: cobertura con JaCoCo (SCRUM-25)
 

@@ -49,9 +49,49 @@ Una fila por archivo de código. Lo genera `exportar_medidas.py`.
 
 Una sola fila con las mismas medidas para el proyecto completo. Sirve para comparar con la suma de los archivos (supuesto S6 de la prueba 1) y para el análisis por proyecto del eje 3. No lleva `imputadas`: a nivel proyecto SonarQube informa todas las medidas.
 
+Si la clave tiene período de código nuevo (desde su segundo análisis), la fila suma la definición del período y las medidas de código nuevo del proyecto:
+
+| Columna | Descripción |
+| --- | --- |
+| `periodo_modo` | Criterio de código nuevo con que se calculó el último análisis (por ejemplo `PREVIOUS_VERSION`) |
+| `periodo_parametro` | Referencia del criterio: con `PREVIOUS_VERSION`, la versión anterior |
+| `periodo_fecha` | Comienzo del período: fecha del análisis de referencia |
+| `new_*` | Las mismas columnas de `codigo_nuevo_archivo.csv`, para el proyecto completo |
+
 ## `datos/<clave>/issues.csv`
 
 Una fila por issue abierto. `regla` es la clave de la regla (por ejemplo `java:S3776`), `tipo` y `severidad` son de la taxonomía estándar, `impactos` y `atributo_clean_code` de la taxonomía Clean Code, y `esfuerzo` es el tiempo de remediación que asigna la regla (por ejemplo `5min`).
+
+`fecha_creacion` es la fecha que SonarQube le asigna al issue. Con historia de git sería la del último cambio de la línea; como los checkouts no la traen, es la del primer análisis de la clave que lo detectó. `codigo_nuevo` vale `sí` si el issue está en el período de código nuevo (filtro `inNewCodePeriod` de la API, el mismo criterio de `new_violations`), `no` si no, y queda vacía si la clave tiene un solo análisis.
+
+## `datos/<clave>/codigo_nuevo_archivo.csv`
+
+Una fila por archivo con las medidas de código nuevo. Solo existe si la clave tiene período de código nuevo. La API las devuelve en el campo `period` de cada medida y no en `value`.
+
+| Columna | Descripción |
+| --- | --- |
+| `new_lines`, `new_lines_to_cover` | Líneas nuevas y líneas nuevas que se podrían cubrir con tests |
+| `new_violations`, `new_code_smells` | Issues nuevos (todos, y solo los de mantenibilidad en la taxonomía estándar) |
+| `new_technical_debt`, `new_sqale_debt_ratio`, `new_maintainability_rating` | Deuda, ratio y calificación del código nuevo, modo estándar (la calificación con su `_letra`) |
+| `new_software_quality_maintainability_*` | Lo mismo en modo MQR |
+| `new_duplicated_lines_density`, `new_coverage` | Las otras dos condiciones del gate por defecto. `new_coverage` queda vacía si el análisis se corrió sin tests |
+
+No se imputa nada: una celda vacía puede significar que el archivo no tiene código nuevo o que SonarQube omitió el mejor valor. Como `medidas_archivo.csv`, solo trae archivos principales (calificador `FIL`): los de test no aparecen, aunque sí cuentan en el `new_lines` del proyecto (ver los resultados de la prueba técnica 3). `new_lines` cuenta líneas físicas, incluidas las vacías y los comentarios. Las métricas que la instancia no tiene se omiten con un aviso.
+
+## `datos/diff-<proyecto>/archivos.csv`
+
+Lo genera `diff_releases.py` con `git diff --no-index` entre los checkouts de los dos releases. Es la referencia independiente de SonarQube para la prueba técnica 3. Una fila por archivo `.java` que cambió.
+
+| Columna | Descripción |
+| --- | --- |
+| `ambito` | `main` (`src/main/`), `test` (`src/test/`) u `otro` |
+| `estado` | `agregado`, `modificado` o `borrado`. Un renombrado aparece como borrado más agregado |
+| `agregadas`, `borradas` | Líneas agregadas y borradas según git. Una línea modificada cuenta como una borrada y una agregada |
+| `agregadas_codigo` | Aproximación de las agregadas que son código: sin las vacías ni las que empiezan como comentario (`//`, `/*`, `*`) |
+
+## `datos/<clave>/comparacion_codigo_nuevo.csv`
+
+Lo genera `diff_releases.py <proyecto> --comparar <clave>`. Una fila por archivo `.java` presente en el release nuevo, con lo que cambió de verdad (`estado_real`, que puede ser `sin cambios`, `agregadas`, `agregadas_codigo`) al lado de lo que informó SonarQube (`new_lines`, `new_violations`, y `issues_nuevos`, que cuenta los issues con `codigo_nuevo = sí`). En las columnas de SonarQube, un vacío por archivo se toma como 0; si el archivo no figura en la exportación, quedan vacías.
 
 ## `datos/<clave>/quality_gate.csv`
 

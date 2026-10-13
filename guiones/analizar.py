@@ -119,9 +119,13 @@ def main() -> None:
     )
 
     # Con qualitygate.wait, un gate rechazado devuelve código distinto de 0 aunque
-    # el análisis haya terminado bien: se distingue leyendo el log.
+    # el análisis haya terminado bien: se distingue leyendo el log. El escáner
+    # solo informa el estado del gate después de que el servidor procesó el
+    # reporte, así que esa línea alcanza para saber que el análisis quedó
+    # publicado. (La versión anterior buscaba además "ANALYSIS SUCCESSFUL", que
+    # el escáner de Maven 5.x ya no imprime: lo mostró la prueba técnica 3.)
     log = ruta_log.read_text(encoding="utf-8", errors="replace")
-    if "ANALYSIS SUCCESSFUL" in log and "QUALITY GATE STATUS: FAILED" in log:
+    if "QUALITY GATE STATUS: FAILED" in log:
         resultado = "ok (gate rechazado)"
     elif codigo == 0:
         resultado = "ok"

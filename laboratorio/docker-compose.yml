@@ -60,7 +60,13 @@ services:
       POSTGRES_PASSWORD: sonar
       POSTGRES_DB: sonar
     volumes:
+      # Hacen falta los dos montajes, como en el ejemplo oficial. La imagen
+      # postgres:17 declara un volumen propio en /var/lib/postgresql/data, que es
+      # donde guarda la base: si solo se monta /var/lib/postgresql, Docker crea
+      # ahí un volumen anónimo que tapa al nuestro, y cada down + up arranca con
+      # una base vacía (pasó el 2026-10-13: admin volvió a la contraseña de fábrica).
       - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
 
   # Contenedor efímero para compilar y analizar el corpus. No arranca con "up":
   # los guiones lo invocan con "docker compose run --rm herramientas ...".
@@ -84,4 +90,5 @@ volumes:
   sonarqube_logs:
   sonarqube_temp:
   postgresql:
+  postgresql_data:
   maven_repositorio:

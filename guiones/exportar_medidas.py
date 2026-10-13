@@ -1,6 +1,6 @@
 """Exporta a CSV los datos de un proyecto analizado en SonarQube.
 
-Genera cuatro archivos en ``datos/<clave>/``:
+Genera hasta cinco archivos en ``datos/<clave>/``:
 
 * ``medidas_archivo.csv``: una fila por archivo de código con tamaño,
   complejidades, deuda técnica, ratio de deuda, calificación, duplicación,
@@ -8,8 +8,14 @@ Genera cuatro archivos en ``datos/<clave>/``:
 * ``medidas_proyecto.csv``: las mismas medidas para el proyecto completo, para
   comparar con la suma de los archivos.
 * ``issues.csv``: una fila por issue con regla, tipo, severidad, archivo,
-  línea y esfuerzo de remediación (insumo de los ejes 1 y 3).
+  línea, esfuerzo de remediación, fecha de creación y si SonarQube lo cuenta
+  como código nuevo (insumo de los ejes 1 y 3).
 * ``quality_gate.csv``: estado del gate y valor de cada condición (eje 3).
+* ``codigo_nuevo_archivo.csv``: medidas de código nuevo por archivo (líneas,
+  issues y deuda nuevos). Solo se genera si la clave tiene período de código
+  nuevo, es decir, desde el segundo análisis (prueba técnica 3, decisión D2).
+  Las mismas medidas a nivel proyecto, junto con la definición del período,
+  se agregan a ``medidas_proyecto.csv``.
 
 Antes de pedir las medidas consulta qué métricas existen en la instancia,
 porque algunas cambian de nombre entre versiones (modo estándar y modo MQR).
@@ -65,7 +71,30 @@ METRICAS_POR_PEDIDO = 15
 
 # Las calificaciones vienen como número (1.0 = A ... 5.0 = E).
 LETRAS = {"1.0": "A", "2.0": "B", "3.0": "C", "4.0": "D", "5.0": "E"}
-METRICAS_CALIFICACION = {"sqale_rating", "software_quality_maintainability_rating"}
+METRICAS_CALIFICACION = {
+    "sqale_rating", "software_quality_maintainability_rating",
+    "new_maintainability_rating", "new_software_quality_maintainability_rating",
+}
+
+# Métricas de código nuevo (prueba técnica 3, decisión D2). Solo tienen valor
+# cuando la clave tiene un período de código nuevo, es decir, a partir del
+# segundo análisis. La API no las devuelve en "value" sino en "period": ver
+# valor_de_medida. Se piden aparte de METRICAS_ARCHIVO para no mezclarlas con
+# los insumos del eje 1, que se miden sobre todo el código.
+METRICAS_CODIGO_NUEVO = [
+    # Tamaño del código nuevo
+    "new_lines", "new_lines_to_cover",
+    # Issues nuevos (lo que evalúa el gate por defecto)
+    "new_violations", "new_code_smells",
+    # Deuda del código nuevo, modo estándar y modo MQR
+    "new_technical_debt", "new_sqale_debt_ratio", "new_maintainability_rating",
+    "new_software_quality_maintainability_issues",
+    "new_software_quality_maintainability_remediation_effort",
+    "new_software_quality_maintainability_debt_ratio",
+    "new_software_quality_maintainability_rating",
+    # Las otras dos condiciones del gate por defecto
+    "new_duplicated_lines_density", "new_coverage",
+]
 
 # La imputación del mejor valor se limita al lenguaje del estudio: en otros
 # archivos (por ejemplo pom.xml) algunas métricas, como la complejidad, no aplican.
@@ -90,6 +119,21 @@ CERO_SI_VACIO = {
     "cognitive_complexity": "0",
     "duplicated_lines_density": "0.0",
 }
+
+
+def valor_de_medida(medida: dict) -> str:
+    """Valor de una medida tal como lo devuelve la API de medidas.
+
+    Las medidas comunes traen el valor en ``value``. Las de código nuevo
+    (``new_*``) lo traen en ``period.value``, y las versiones viejas de la API
+    usaban la lista ``periods``. Si no viene ninguno, devuelve cadena vacía.
+    """
+    if "value" in medida:
+        return medida["value"]
+    if "period" in medida:
+        return medida["period"].get("value", "")
+    periodos = medida.get("periods") or []
+    return periodos[0].get("value", "") if periodos else ""
 
 
 def definiciones_metricas(cliente: ClienteSonar) -> dict[str, dict]:
@@ -159,7 +203,7 @@ def exportar_medidas_archivo(cliente: ClienteSonar, clave: str, metricas: list[s
             fila["archivo"] = componente.get("path", componente["key"])
             fila["lenguaje"] = componente.get("language", "")
             for medida in componente.get("measures", []):
-                valor = medida.get("value", "")
+                valor = valor_de_medida(medida)
                 if medida["metric"] in METRICAS_CALIFICACION:
                     fila[medida["metric"] + "_letra"] = LETRAS.get(valor, "")
                 fila[medida["metric"]] = valor
@@ -173,11 +217,49 @@ def exportar_medidas_proyecto(cliente: ClienteSonar, clave: str, metricas: list[
         grupo = metricas[i : i + METRICAS_POR_PEDIDO]
         respuesta = cliente.get("/api/measures/component", component=clave, metricKeys=",".join(grupo))
         for medida in respuesta.get("component", {}).get("measures", []):
-            valor = medida.get("value", "")
+            valor = valor_de_medida(medida)
             if medida["metric"] in METRICAS_CALIFICACION:
                 fila[medida["metric"] + "_letra"] = LETRAS.get(valor, "")
             fila[medida["metric"]] = valor
     return fila
+
+
+def periodo_codigo_nuevo(cliente: ClienteSonar, clave: str) -> dict[str, str]:
+    """Definición del período de código nuevo con el que se calculó el último análisis.
+
+    ``periodo_modo`` es el criterio (por ejemplo ``PREVIOUS_VERSION``),
+    ``periodo_parametro`` la referencia (la versión anterior) y ``periodo_fecha``
+    el comienzo del período. Quedan vacíos si la clave tiene un solo análisis.
+    """
+    respuesta = cliente.get(
+        "/api/measures/component", component=clave, metricKeys="ncloc", additionalFields="period"
+    )
+    periodo = respuesta.get("period") or next(iter(respuesta.get("periods") or []), {})
+    return {
+        "periodo_modo": periodo.get("mode", ""),
+        "periodo_parametro": periodo.get("parameter", ""),
+        "periodo_fecha": periodo.get("date", ""),
+    }
+
+
+def claves_issues_codigo_nuevo(cliente: ClienteSonar, clave: str) -> set[str] | None:
+    """Claves de los issues abiertos que SonarQube cuenta como código nuevo.
+
+    Usa el filtro ``inNewCodePeriod`` de la API, que es el criterio con el que
+    se calcula ``new_violations``: así la columna ``codigo_nuevo`` de
+    issues.csv cuadra con la medida. Devuelve None si no se pudo obtener.
+    """
+    try:
+        total = cliente.get(
+            "/api/issues/search", componentKeys=clave, resolved="false", inNewCodePeriod="true", ps=1
+        ).get("total", 0)
+    except ErrorSonar as error:
+        aviso(f"La API no aceptó el filtro inNewCodePeriod ({error}): codigo_nuevo queda vacía")
+        return None
+    if total > ClienteSonar.LIMITE_ISSUES:
+        aviso(f"{total} issues en código nuevo superan el tope de la API: codigo_nuevo queda vacía")
+        return None
+    return {issue["key"] for issue in _pagina_issues(cliente, clave, inNewCodePeriod="true")}
 
 
 def _pagina_issues(cliente: ClienteSonar, clave: str, **filtros: str):
@@ -194,8 +276,11 @@ def _pagina_issues(cliente: ClienteSonar, clave: str, **filtros: str):
     )
 
 
-def exportar_issues(cliente: ClienteSonar, clave: str) -> list[dict]:
+def exportar_issues(cliente: ClienteSonar, clave: str, nuevos: set[str] | None = None) -> list[dict]:
     """Todos los issues abiertos del proyecto (los cerrados no se exportan).
+
+    ``nuevos`` son las claves de los issues en código nuevo (ver
+    claves_issues_codigo_nuevo). Si es None, la columna codigo_nuevo queda vacía.
 
     La API no devuelve más de 10.000 resultados por consulta. Si el proyecto
     tiene más, se parte la consulta por regla (ninguna regla sola debería
@@ -233,6 +318,11 @@ def exportar_issues(cliente: ClienteSonar, clave: str) -> list[dict]:
                 "linea_fin": rango.get("endLine", ""),
                 "esfuerzo": issue.get("effort", ""),
                 "estado": issue.get("issueStatus", issue.get("status", "")),
+                # Sin historia de git (checkouts con --depth 1) SonarQube no puede
+                # fechar el issue por la línea, y la fecha es la del análisis que
+                # lo detectó por primera vez.
+                "fecha_creacion": issue.get("creationDate", ""),
+                "codigo_nuevo": "" if nuevos is None else ("sí" if issue["key"] in nuevos else "no"),
                 "mensaje": issue.get("message", ""),
             }
         )
@@ -281,6 +371,27 @@ def main() -> None:
     medidas = exportar_medidas_archivo(cliente, args.clave, metricas)
     proyecto = exportar_medidas_proyecto(cliente, args.clave, metricas)
 
+    # Código nuevo: solo si hay período (desde el segundo análisis de la clave).
+    periodo = periodo_codigo_nuevo(cliente, args.clave)
+    hay_periodo = bool(periodo["periodo_fecha"])
+    metricas_nuevas = metricas_disponibles(definiciones, METRICAS_CODIGO_NUEVO) if hay_periodo else []
+    columnas_nuevas = []
+    for metrica in metricas_nuevas:
+        columnas_nuevas.append(metrica)
+        if metrica in METRICAS_CALIFICACION:
+            columnas_nuevas.append(metrica + "_letra")
+    medidas_nuevas: list[dict] = []
+    if hay_periodo:
+        info(f"Período de código nuevo: {periodo['periodo_modo']} {periodo['periodo_parametro']} "
+             f"desde {periodo['periodo_fecha']}")
+        # Sin imputación: un vacío por archivo puede ser "sin código nuevo" o
+        # "mejor valor omitido", y la prueba técnica 3 es justamente la que mira eso.
+        medidas_nuevas = exportar_medidas_archivo(cliente, args.clave, metricas_nuevas)
+        proyecto.update(exportar_medidas_proyecto(cliente, args.clave, metricas_nuevas))
+        proyecto.update(periodo)
+    else:
+        info("La clave no tiene período de código nuevo (un solo análisis): no se exportan medidas de código nuevo")
+
     mejores = mejores_valores(metricas)
     completadas = imputar_mejores_valores(medidas, mejores)
     info(
@@ -290,21 +401,32 @@ def main() -> None:
 
     sin_tests = ultimo_analisis_sin_tests(args.clave)
     if sin_tests:
-        for fila in [*medidas, proyecto]:
-            fila["coverage"] = ""
+        for fila in [*medidas, *medidas_nuevas, proyecto]:
+            for metrica in ("coverage", "new_coverage"):
+                if metrica in fila:
+                    fila[metrica] = ""
         info("El último análisis se corrió sin tests: la cobertura queda vacía")
     elif sin_tests is None:
         aviso(f"{args.clave} no figura en el registro de análisis: no se sabe si la cobertura es una medición")
 
     escribir_csv(destino / "medidas_archivo.csv", medidas, ["archivo", "lenguaje", *columnas_metricas, "imputadas"])
-    escribir_csv(destino / "medidas_proyecto.csv", [proyecto], ["proyecto", *columnas_metricas])
+    columnas_periodo = ["periodo_modo", "periodo_parametro", "periodo_fecha"] if hay_periodo else []
+    escribir_csv(
+        destino / "medidas_proyecto.csv",
+        [proyecto],
+        ["proyecto", *columnas_metricas, *columnas_periodo, *columnas_nuevas],
+    )
+    if hay_periodo:
+        escribir_csv(destino / "codigo_nuevo_archivo.csv", medidas_nuevas, ["archivo", "lenguaje", *columnas_nuevas])
 
-    issues = exportar_issues(cliente, args.clave)
+    nuevos = claves_issues_codigo_nuevo(cliente, args.clave) if hay_periodo else None
+    issues = exportar_issues(cliente, args.clave, nuevos)
     escribir_csv(
         destino / "issues.csv",
         issues,
         ["clave_issue", "regla", "tipo", "severidad", "impactos", "atributo_clean_code",
-         "archivo", "linea_inicio", "linea_fin", "esfuerzo", "estado", "mensaje"],
+         "archivo", "linea_inicio", "linea_fin", "esfuerzo", "estado", "fecha_creacion", "codigo_nuevo",
+         "mensaje"],
     )
 
     escribir_csv(

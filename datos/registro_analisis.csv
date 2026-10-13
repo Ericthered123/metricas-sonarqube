@@ -1,3 +1,5 @@
 fecha,clave,proyecto,version,commit,fecha_analisis,tests,jacoco,resultado,duracion_s,log
 2026-10-12T20:30:08,prueba-pt1-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,,no,no,ok,174,analisis-prueba-pt1-jsoup-1.23.2-20261012-203008.log
 2026-10-12T23:57:51,extraccion-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,,no,no,ok,1116,analisis-extraccion-jsoup-1.23.2-20261012-235751.log
+2026-10-13T11:28:49,prueba-pt3-jsoup,jsoup,1.22.2,ac28afe6e5bf96d39fd17c3e0a797a7585e1958c,,no,no,ok,151,analisis-prueba-pt3-jsoup-1.22.2-20261013-112849.log
+2026-10-13T11:32:27,prueba-pt3-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,,no,no,ok (gate rechazado),147,analisis-prueba-pt3-jsoup-1.23.2-20261013-113227.log
