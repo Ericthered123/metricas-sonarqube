@@ -12,7 +12,8 @@ Una fila por versión del corpus. Lo genera `compilar_corpus.py`.
 | `jdk`, `maven` | Versiones usadas por el contenedor de herramientas |
 | `resultado` | `ok` si `mvn verify` terminó bien; si no, el código de salida |
 | `duracion_s` | Duración del build en segundos |
-| `tests`, `fallas`, `errores`, `omitidos` | Totales de los reportes de Surefire. Describen el build en este entorno, no la calidad del proyecto: algunos tests fallan por el entorno (contenedor como root, sitios externos). Ver la sección de SCRUM-22 en `docs/pruebas-tecnicas.md` |
+| `tests`, `fallas`, `errores`, `omitidos` | Tests unitarios (Surefire), sumando los resúmenes que imprime Maven al final de cada ejecución. No se usan los reportes XML porque no incluyen las clases de test anidadas definidas en clases abstractas. Describen el build en este entorno, no la calidad del proyecto: algunos tests fallan por el entorno (contenedor como root, sitios externos). Ver la sección de SCRUM-22 en `docs/pruebas-tecnicas.md` |
+| `tests_integracion`, `fallas_integracion` | Tests de integración (Failsafe) y cuántos fallaron, con o sin error. Solo jsoup los tiene |
 | `fecha`, `log` | Momento de la corrida y nombre del log en `trabajo/logs/` |
 
 ## `datos/registro_analisis.csv`
@@ -36,10 +37,17 @@ Una fila por archivo de código. Lo genera `exportar_medidas.py`.
 | `code_smells` | Cantidad de issues de mantenibilidad (modo estándar) | Absoluta |
 | `software_quality_maintainability_*` | Las mismas medidas en modo MQR (taxonomía Clean Code) | Ídem |
 | `duplicated_lines_density` | Porcentaje de líneas duplicadas | Razón |
-| `coverage` | Cobertura de tests en % (vacía si no se midió) | Razón |
+| `coverage` | Cobertura de tests en %. Vacía si el archivo no tiene líneas para cubrir o si el análisis se corrió sin tests: en ese caso SonarQube informa 0,0 %, que no es una medición, y el guion lo borra | Razón |
 | `violations` | Cantidad total de issues | Absoluta |
+| `imputadas` | Métricas de la fila que el guion completó con su mejor valor, separadas por `;` | Nominal |
 
-Una celda vacía significa que SonarQube no informó esa medida para ese archivo.
+**Celdas vacías y mejor valor.** SonarQube no guarda, por archivo, las medidas que valen su mejor valor (por ejemplo deuda 0), y la API las devuelve vacías. En los archivos Java el guion completa con 0 las métricas de la lista `CERO_SI_VACIO` de `exportar_medidas.py` (deuda, ratio, code smells, issues de mantenibilidad, violaciones, complejidad cognitiva y duplicación) y lo anota en `imputadas`. La lista es explícita porque la API de métricas no informa el mejor valor de cada una. En la prueba 1 se verificó contra `issues.csv` que ningún archivo con deuda, ratio, code smells o violaciones vacías tiene issues que debieran haberlas sumado. Ejemplo de la prueba 1: `TokeniserState.java` tiene 10 min de deuda sobre 1.759 líneas, un ratio de 0,019 % que redondea a 0,0 y que la API no devuelve. La cobertura nunca se completa. En los archivos que no son Java (por ejemplo `pom.xml`), una celda vacía significa que SonarQube no informó esa medida.
+
+**Resolución del ratio.** `sqale_debt_ratio` viene redondeado a un decimal. Para el eje 1 conviene calcularlo como `sqale_index / (30 x ncloc)` y usar el publicado como control.
+
+## `datos/<clave>/medidas_proyecto.csv`
+
+Una sola fila con las mismas medidas para el proyecto completo. Sirve para comparar con la suma de los archivos (supuesto S6 de la prueba 1) y para el análisis por proyecto del eje 3. No lleva `imputadas`: a nivel proyecto SonarQube informa todas las medidas.
 
 ## `datos/<clave>/issues.csv`
 

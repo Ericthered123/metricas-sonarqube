@@ -1,16 +1,31 @@
 """Exporta a CSV los datos de un proyecto analizado en SonarQube.
 
-Genera tres archivos en ``datos/<clave>/``:
+Genera cuatro archivos en ``datos/<clave>/``:
 
 * ``medidas_archivo.csv``: una fila por archivo de código con tamaño,
   complejidades, deuda técnica, ratio de deuda, calificación, duplicación,
   cobertura y cantidad de issues (insumo del eje 1).
+* ``medidas_proyecto.csv``: las mismas medidas para el proyecto completo, para
+  comparar con la suma de los archivos.
 * ``issues.csv``: una fila por issue con regla, tipo, severidad, archivo,
   línea y esfuerzo de remediación (insumo de los ejes 1 y 3).
 * ``quality_gate.csv``: estado del gate y valor de cada condición (eje 3).
 
 Antes de pedir las medidas consulta qué métricas existen en la instancia,
 porque algunas cambian de nombre entre versiones (modo estándar y modo MQR).
+
+Dos correcciones para que cada celda diga lo que parece decir:
+
+* Mejor valor omitido. SonarQube no guarda, por archivo, las medidas cuyo
+  valor es el mejor posible (por ejemplo deuda 0), y la API las devuelve
+  vacías. En los archivos Java se completan con 0 las métricas de
+  ``CERO_SI_VACIO`` y la columna ``imputadas`` dice cuáles se completaron.
+  La lista es explícita porque ``/api/metrics/search`` no informa el mejor
+  valor de cada métrica (se comprobó en la prueba 1). La cobertura no se
+  completa nunca (ver el punto siguiente).
+* Cobertura sin tests. Si el último análisis de la clave se corrió sin tests
+  (según ``datos/registro_analisis.csv``), SonarQube informa cobertura 0,0 %,
+  que no es una medición: la columna ``coverage`` se deja vacía.
 
 Uso:
     python guiones/exportar_medidas.py prueba-pt1-jsoup
@@ -20,9 +35,12 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import csv
 from collections import defaultdict
 
 from comun import DIR_DATOS, ClienteSonar, ErrorSonar, aviso, escribir_csv, info, salir
+
+ARCHIVO_REGISTRO = DIR_DATOS / "registro_analisis.csv"
 
 # Métricas por archivo que se piden. Se agrupan por concepto; las que la
 # instancia no tenga se omiten y se avisa (ver métricas_disponibles).
@@ -49,14 +67,79 @@ METRICAS_POR_PEDIDO = 15
 LETRAS = {"1.0": "A", "2.0": "B", "3.0": "C", "4.0": "D", "5.0": "E"}
 METRICAS_CALIFICACION = {"sqale_rating", "software_quality_maintainability_rating"}
 
+# La imputación del mejor valor se limita al lenguaje del estudio: en otros
+# archivos (por ejemplo pom.xml) algunas métricas, como la complejidad, no aplican.
+LENGUAJES_IMPUTABLES = {"java"}
 
-def metricas_disponibles(cliente: ClienteSonar, pedidas: list[str]) -> list[str]:
+# Métricas cuyo mejor valor es 0 y que SonarQube omite por archivo cuando lo
+# valen. Verificado en la prueba 1 (jsoup) contra issues.csv: en todos los
+# archivos Java con deuda, ratio, code smells, issues de mantenibilidad o
+# violaciones vacías no hay ningún issue que debiera haberlas sumado. La
+# complejidad cognitiva y la duplicación no tienen un control cruzado posible
+# con los datos exportados; se completan por la misma regla de mejor valor.
+# La cobertura no está: su mejor valor es 100 % y un vacío puede significar
+# "no hay líneas para cubrir" o "no se midió".
+CERO_SI_VACIO = {
+    "sqale_index": "0",
+    "sqale_debt_ratio": "0.0",
+    "code_smells": "0",
+    "software_quality_maintainability_remediation_effort": "0",
+    "software_quality_maintainability_debt_ratio": "0.0",
+    "software_quality_maintainability_issues": "0",
+    "violations": "0",
+    "cognitive_complexity": "0",
+    "duplicated_lines_density": "0.0",
+}
+
+
+def definiciones_metricas(cliente: ClienteSonar) -> dict[str, dict]:
+    """Definición de cada métrica de la instancia, indexada por su clave."""
+    return {m["key"]: m for m in cliente.paginar("/api/metrics/search", "metrics")}
+
+
+def metricas_disponibles(definiciones: dict[str, dict], pedidas: list[str]) -> list[str]:
     """Filtra las métricas pedidas a las que existen en esta instancia."""
-    existentes = {m["key"] for m in cliente.paginar("/api/metrics/search", "metrics")}
-    faltantes = [m for m in pedidas if m not in existentes]
+    faltantes = [m for m in pedidas if m not in definiciones]
     if faltantes:
         aviso(f"Métricas que esta versión de SonarQube no tiene (se omiten): {', '.join(faltantes)}")
-    return [m for m in pedidas if m in existentes]
+    return [m for m in pedidas if m in definiciones]
+
+
+def mejores_valores(metricas: list[str]) -> dict[str, str]:
+    """De las métricas exportadas, las que se completan con 0 cuando vienen vacías."""
+    return {m: CERO_SI_VACIO[m] for m in metricas if m in CERO_SI_VACIO}
+
+
+def imputar_mejores_valores(filas: list[dict], mejores: dict[str, str]) -> int:
+    """Completa las medidas omitidas por ser el mejor valor. Devuelve cuántas celdas completó."""
+    completadas = 0
+    for fila in filas:
+        imputadas = []
+        if fila.get("lenguaje") in LENGUAJES_IMPUTABLES:
+            for metrica, valor in mejores.items():
+                if fila.get(metrica, "") == "":
+                    fila[metrica] = valor
+                    if metrica in METRICAS_CALIFICACION:
+                        fila[metrica + "_letra"] = LETRAS.get(valor, "")
+                    imputadas.append(metrica)
+        fila["imputadas"] = ";".join(imputadas)
+        completadas += len(imputadas)
+    return completadas
+
+
+def ultimo_analisis_sin_tests(clave: str) -> bool | None:
+    """Dice si el último análisis registrado de la clave se corrió sin tests.
+
+    Devuelve None si la clave no figura en el registro (por ejemplo, si el
+    análisis no se lanzó con analizar.py).
+    """
+    if not ARCHIVO_REGISTRO.exists():
+        return None
+    with ARCHIVO_REGISTRO.open(encoding="utf-8", newline="") as archivo:
+        filas = [f for f in csv.DictReader(archivo) if f.get("clave") == clave]
+    if not filas:
+        return None
+    return filas[-1].get("tests") == "no"
 
 
 def exportar_medidas_archivo(cliente: ClienteSonar, clave: str, metricas: list[str]) -> list[dict]:
@@ -81,6 +164,20 @@ def exportar_medidas_archivo(cliente: ClienteSonar, clave: str, metricas: list[s
                     fila[medida["metric"] + "_letra"] = LETRAS.get(valor, "")
                 fila[medida["metric"]] = valor
     return sorted(filas.values(), key=lambda f: f["archivo"])
+
+
+def exportar_medidas_proyecto(cliente: ClienteSonar, clave: str, metricas: list[str]) -> dict:
+    """Medidas del proyecto completo (incluye lo que no está en los archivos de código, como los tests)."""
+    fila: dict = {"proyecto": clave}
+    for i in range(0, len(metricas), METRICAS_POR_PEDIDO):
+        grupo = metricas[i : i + METRICAS_POR_PEDIDO]
+        respuesta = cliente.get("/api/measures/component", component=clave, metricKeys=",".join(grupo))
+        for medida in respuesta.get("component", {}).get("measures", []):
+            valor = medida.get("value", "")
+            if medida["metric"] in METRICAS_CALIFICACION:
+                fila[medida["metric"] + "_letra"] = LETRAS.get(valor, "")
+            fila[medida["metric"]] = valor
+    return fila
 
 
 def _pagina_issues(cliente: ClienteSonar, clave: str, **filtros: str):
@@ -169,15 +266,34 @@ def main() -> None:
         raise
 
     destino = DIR_DATOS / args.clave
-    metricas = metricas_disponibles(cliente, METRICAS_ARCHIVO)
+    definiciones = definiciones_metricas(cliente)
+    metricas = metricas_disponibles(definiciones, METRICAS_ARCHIVO)
+    columnas_metricas = []
+    for metrica in metricas:
+        columnas_metricas.append(metrica)
+        if metrica in METRICAS_CALIFICACION:
+            columnas_metricas.append(metrica + "_letra")
 
     medidas = exportar_medidas_archivo(cliente, args.clave, metricas)
-    columnas = ["archivo", "lenguaje"]
-    for metrica in metricas:
-        columnas.append(metrica)
-        if metrica in METRICAS_CALIFICACION:
-            columnas.append(metrica + "_letra")
-    escribir_csv(destino / "medidas_archivo.csv", medidas, columnas)
+    proyecto = exportar_medidas_proyecto(cliente, args.clave, metricas)
+
+    mejores = mejores_valores(metricas)
+    completadas = imputar_mejores_valores(medidas, mejores)
+    info(
+        f"Mejor valor completado en {completadas} celdas de archivos Java "
+        f"(métricas: {', '.join(f'{m}={v}' for m, v in mejores.items()) or 'ninguna'})"
+    )
+
+    sin_tests = ultimo_analisis_sin_tests(args.clave)
+    if sin_tests:
+        for fila in [*medidas, proyecto]:
+            fila["coverage"] = ""
+        info("El último análisis se corrió sin tests: la cobertura queda vacía")
+    elif sin_tests is None:
+        aviso(f"{args.clave} no figura en el registro de análisis: no se sabe si la cobertura es una medición")
+
+    escribir_csv(destino / "medidas_archivo.csv", medidas, ["archivo", "lenguaje", *columnas_metricas, "imputadas"])
+    escribir_csv(destino / "medidas_proyecto.csv", [proyecto], ["proyecto", *columnas_metricas])
 
     issues = exportar_issues(cliente, args.clave)
     escribir_csv(

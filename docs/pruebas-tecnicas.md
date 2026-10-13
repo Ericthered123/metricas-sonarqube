@@ -2,13 +2,13 @@
 
 Las cuatro pruebas confirman, antes de comprometernos con un diseño, que el laboratorio puede producir los datos que necesita cada eje. Cada una tiene su tarea en Jira. Cuando una prueba se corre, sus resultados se escriben acá, debajo de su sección, con la fecha.
 
-Estado al 2026-10-12: el laboratorio y los guiones están listos; ninguna prueba se corrió todavía.
+Estado al 2026-10-12: compilación del corpus (SCRUM-22) y prueba técnica 1 corridas; las pruebas 2, 3 y 4 todavía no.
 
 **Cuándo se corren los tests (decidido el 2026-10-12).** `analizar.py` compila de nuevo en cada análisis y, por defecto, corre todos los tests. Los tests solo hacen falta para medir cobertura, así que se usa `--sin-tests` en las pruebas 1, 2 y 3 y en los análisis `extraccion-*`. La prueba 4 y los análisis principales `corpus-*` se corren con tests y `--jacoco` (decisión D2 bis). `--sin-tests` pasa `-DskipTests=true`, que compila los tests pero no los ejecuta: SonarQube sigue analizando el código de test con sus clases compiladas, y lo único que falta es la cobertura. En commons-io los tests tardan unos 11 minutos.
 
 ## Prueba técnica 1: punta a punta y medidas por archivo (SCRUM-21)
 
-**Qué confirma.** Que SonarQube levanta, que un proyecto del corpus se analiza completo y que se pueden exportar por la API, para cada archivo, las medidas del eje 1. Además verifica cuatro supuestos:
+**Qué confirma.** Que SonarQube levanta, que un proyecto del corpus se analiza completo y que se pueden exportar por la API, para cada archivo, las medidas del eje 1. Además verifica cuatro supuestos, y desde el 2026-10-12 informa dos más (S5 y S6, ver los resultados):
 
 | Supuesto | Por qué importa |
 | --- | --- |
@@ -21,7 +21,39 @@ Estado al 2026-10-12: el laboratorio y los guiones están listos; ninguna prueba
 
 **Hecho cuando.** Existen `datos/prueba-pt1-jsoup/medidas_archivo.csv`, `issues.csv` y `supuestos.md`, y los cuatro supuestos están confirmados o refutados.
 
-**Resultados.** Pendiente.
+**Resultados (2026-10-12).** Corrida con `--sin-tests`; el análisis tardó 174 s. Los cuatro supuestos se confirman, pero con matices que cambian cómo hay que leer los datos.
+
+| Supuesto | Resultado |
+| --- | --- |
+| S1 | Confirmado con un matiz. El ratio y la letra existen por archivo, pero la API no devuelve la deuda ni el ratio cuando valen su mejor valor (0). De los 96 archivos, 74 no traen ninguno de los dos (deuda 0) y `TokeniserState.java` trae deuda (10 min sobre 1.759 líneas) pero no ratio, porque 0,019 % redondea a 0,0. Un vacío en esas columnas significa 0, no falta de dato |
+| S2 | Confirmado: 30 min por línea, valor de fábrica |
+| S3 | Confirmado: 0.05, 0.1, 0.2 y 0.5, valor de fábrica |
+| S4 | Confirmado en los 21 archivos con ratio. La diferencia máxima, 0,049 puntos, es el redondeo: el ratio publicado tiene un solo decimal |
+
+Lo que dejó la prueba, además de los supuestos:
+
+1. **Todo jsoup es A.** Los 96 archivos tienen A; el ratio más alto es 3,8 % y el del proyecto, 0,11 % (620 min sobre 18.941 líneas). En jsoup no hay ningún archivo cerca de un borde entre letras. Antes de cerrar D5 conviene ver cómo se distribuye el resto del corpus.
+2. **El ratio publicado tiene resolución de 0,1 puntos.** Lo confirma la definición de la métrica en la API: `sqale_debt_ratio` tiene `decimalScale` 1 (respuesta guardada con `consultar_api.py /api/metrics/search --paginar metrics`). Para el eje 1 conviene calcular el ratio a partir de la deuda y las líneas (S4 confirma la fórmula) y usar el publicado como control. Queda por ver qué valor usa la herramienta para decidir la letra en el borde de 5 %: el redondeado o el exacto.
+3. **Dos modelos, dos deudas.** El CSV trae las columnas del modelo clásico (`sqale_*`, por tipo de issue) y las del modelo por impactos (`software_quality_maintainability_*`). En jsoup no coinciden: 620 min contra 580 min en el código principal. La diferencia es la regla `java:S8786` (expresión regular con tiempo de ejecución excesivo), que en el modelo clásico es CODE_SMELL y en el nuevo tiene impacto RELIABILITY: suma 20 min de deuda en `HttpConnection.java` y en `Safelist.java` en un modelo y nada en el otro. Sirve para 3.2 y para la extensión del cambio de taxonomía. Además, en la API las dos calificaciones se llaman igual, "Maintainability Rating" (`sqale_rating` y `software_quality_maintainability_rating`): solo la clave dice de qué modelo es cada una. La instancia está en modo MQR (S5), así que la interfaz muestra la deuda y la letra del modelo por impactos.
+4. **La deuda del proyecto incluye la del código de test, pero las líneas no.** `exportar_medidas.py` pide archivos con calificador `FIL`, y los de test tienen `UTS`, así que no están en las medidas por archivo. Hay 7 issues en código de test que suman 55 min. La deuda del proyecto es 675 min en el modelo clásico (620 de código principal más 55 de tests) y 635 en el de impactos (580 más 55), mientras que las líneas del proyecto (18.941) son solo las del código principal. El ratio del proyecto divide entonces una deuda de dos poblaciones por el tamaño de una sola (S6 refutado). En jsoup el efecto es chico, pero es un problema de validez de la medida para 5.1.
+5. **Sin tests, la cobertura sale 0,0 y no vacía.** En 86 archivos figura 0,0 % (en 10 está vacía). No hay que usar la cobertura de ningún análisis corrido con `--sin-tests`.
+6. **El gate aprueba en un primer análisis.** Sin un análisis anterior no hay código nuevo, y las cuatro condiciones de Sonar way no se evalúan. Para el eje 3 y la prueba 3.
+
+Issues: 55 en total (32 code smells, 22 bugs y 1 vulnerabilidad).
+
+**Supuestos agregados (corridos el 2026-10-12, 23:43).**
+
+| Supuesto | Resultado |
+| --- | --- |
+| S5. Modo de la instancia | MQR: `sonar.multi-quality-mode.enabled` = true. No lo configuró ningún guion del laboratorio |
+| S6. Deuda del proyecto = suma de los archivos de código | Refutado: incluye los 55 min del código de test (ver el hallazgo 4) |
+
+**Cambios en los guiones a partir de la prueba (2026-10-12).** Para los hallazgos 1, 3, 4 y 5:
+
+* `exportar_medidas.py` completa con 0 las medidas omitidas de los archivos Java (lista explícita, porque la API de métricas no informa el mejor valor: en la 26.10, `/api/metrics/search` solo trae clave, nombre, descripción, dominio, tipo, dirección, `qualitative`, `hidden` y `decimalScale`) y lo anota en la columna `imputadas`; deja vacía la cobertura si el análisis se corrió sin tests; y exporta también `medidas_proyecto.csv`.
+* `verificar_supuestos.py` cuenta en S1 y S4 solo los ratios publicados, y agrega S5 (modo de la instancia, leído del ajuste `sonar.multi-quality-mode.enabled`) y S6 (si la deuda del proyecto es la suma de la de sus archivos de código o incluye la de los tests).
+
+Hay que volver a correr `exportar_medidas.py` y `verificar_supuestos.py` sobre `prueba-pt1-jsoup`; no hace falta repetir el análisis.
 
 ## Prueba técnica 2: complejidad por método (SCRUM-23)
 
@@ -97,9 +129,30 @@ La opción `--jacoco` agrega el agente de JaCoCo y el reporte XML desde la líne
 | --- | --- | --- |
 | commons-io 2.21.0 | `FileFilterTest.testCanRead`, `testCanWrite`; `FileUtilsCleanDirectoryTest.testThrowsOnNullList`; `FileUtilsDeleteDirectoryLinuxTest.testThrowsOnNullList`, `testThrowsOnCannotDeleteFile`; `FileUtilsTest.testForceDeleteReadOnlyFile`, `testCopyFileToReadOnlyDirectory`, `testForceDeleteUnwritableFile` y los tres `*_IOExceptionOnPosixFileSystem` (11 fallas) | Permisos. Los tests le quitan un permiso a un archivo y esperan que la operación falle, pero la imagen `maven:3.10.0-eclipse-temurin-21` corre como root, que ignora los permisos. No es el montaje de Windows: esos archivos están en `/tmp` del contenedor |
 | commons-io 2.21.0 | `URIOriginTest.testGetInputStream` [1] y [2] (2 errores) | Red. El test descarga `http://www.apache.com/`, un sitio externo que no es de Apache y que respondió HTTP 500 por http y un certificado que no coincide por https |
+| commons-io 2.22.0 | Los mismos 11 tests de permisos (comparados uno por uno) | Permisos, igual que en 2.21.0. `URIOriginTest` pasó, pero el test cambió entre releases (28 casos en 2.21.0, 33 en 2.22.0), así que no alcanza para hablar de inestabilidad |
 
-En commons-io 2.21.0 son 13 de 6.106 tests (0,2 %); además hay 26 omitidos por el propio proyecto. Las demás versiones se agregan cuando termine la corrida.
+En commons-io 2.21.0 son 13 de 6.106 tests (0,2 %) y en 2.22.0, 11 de 6.301; en las dos hay además 26 omitidos por el propio proyecto. Los otros tres proyectos no tienen fallas.
 
-**Otros hallazgos.** commons-io 2.21.0 compiló en 12:37 min, de los cuales unos 11 fueron tests. Usa JaCoCo 0.8.14, la que fija su POM padre, no la 0.8.15 de `VERSIONES.md`. Revisar en la prueba 4 si `--jacoco` impone la 0.8.15.
+**Resultados (2026-10-12).** Las ocho versiones terminan con BUILD SUCCESS: el criterio 2 de D3 se cumple en todo el corpus. Los tests de la tabla son los que informa Maven en su resumen.
 
-**Resultados.** Corrida iniciada el 2026-10-12; pendiente el CSV completo.
+| Versión | Duración | Tests unitarios | Tests de integración | Fallas de entorno |
+| --- | --- | --- | --- | --- |
+| commons-io 2.21.0 | 12:37 | 6.106 | | 11 de permisos y 2 de red |
+| commons-io 2.22.0 | 21:39 | 6.301 | | 11 de permisos |
+| commons-collections 4.5.0 | 3:18 | 8.399 | | 0 |
+| commons-collections 4.6.0 | 7:21 | 18.024 | | 0 |
+| jsoup 1.22.2 | 2:46 | 1.952 | 48 | 0 |
+| jsoup 1.23.2 | 1:28 | 2.165 | 46 | 0 |
+| jfreechart 1.5.5 | 2:12 | 2.350 | | 0 |
+| jfreechart 1.5.6 | 2:12 | 2.351 | | 0 |
+
+**El CSV contaba mal en dos casos** (corregido el 2026-10-12). `compilar_corpus.py` sumaba los reportes XML de Surefire, y eso no coincidía con lo que ejecuta Maven:
+
+* En commons-collections 4.6.0 faltan 6.507 tests (el CSV dice 11.517). En esa versión el proyecto usa clases de test anidadas (`@Nested`) definidas en clases abstractas, por ejemplo `AbstractMapTest$MapEntrySetTest`, que se ejecutan una vez por cada subclase y no dejan un XML propio: 275 clases en la consola contra 252 archivos XML. En 4.5.0 los dos conteos coinciden.
+* En jsoup no se cuentan los tests de integración de Failsafe.
+
+El guion medía "reportes XML" en lugar de "tests ejecutados": la definición operacional se apartó del concepto. Ahora cuenta desde los resúmenes de Maven, separa los de integración en `tests_integracion` y `fallas_integracion`, y con `--recontar` recalcula el CSV desde los logs sin volver a compilar. Probado contra los ocho logs: coincide con Maven en todos.
+
+**Duraciones.** No son comparables entre corridas: commons-io 2.22.0 tardó casi el doble que 2.21.0 con una suma de tiempos por clase parecida (365 s contra 300 s), y no se controló la carga de la máquina. No se usan en ningún eje.
+
+**JaCoCo propio de cada proyecto.** commons-collections 4.5.0 usa 0.8.12, commons-io 0.8.14 y commons-collections 4.6.0 0.8.15; jsoup y jfreechart no lo traen. A revisar en la prueba 4.

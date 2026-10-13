@@ -89,6 +89,7 @@ docker compose -f laboratorio/docker-compose.yml --env-file laboratorio/.env dow
 * **SonarQube se reinicia solo o queda muy lento.** Le falta memoria: subirla en Docker Desktop, en Settings, Resources.
 * **`preparar_sonarqube.py` no puede autenticarse.** Si cambiaste la contraseña de `admin` a mano, escribila en `SONAR_ADMIN_CLAVE` de `laboratorio/.env`.
 * **Fallan tests de permisos o de red.** Es esperable: el contenedor de herramientas corre como root, que ignora los permisos de archivo, y algunos tests dependen de sitios externos. No afecta el análisis estático. Detalle en la sección de SCRUM-22 de [docs/pruebas-tecnicas.md](docs/pruebas-tecnicas.md).
+* **Un guion no hace lo que se espera con la API.** Consultá la API directamente y guardá la respuesta: `python guiones/consultar_api.py /api/system/status` (más ejemplos en el propio guion). Solo hace pedidos de lectura, toma el token de `laboratorio/.env` y escribe en `trabajo/api/`, que no se versiona. Así la respuesta real queda en un archivo que cualquiera del grupo puede revisar.
 * **Un build falla.** El log completo está en `trabajo/logs/`. El guion ya desactiva los plugins de verificación propios de cada proyecto que no tienen que ver con el estudio (licencias, compatibilidad binaria, estilo).
 
 ## Reglas del laboratorio
