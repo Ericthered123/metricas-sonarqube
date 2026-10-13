@@ -1,0 +1,2 @@
+proyecto,ncloc,lines,statements,functions,classes,complexity,cognitive_complexity,sqale_index,sqale_debt_ratio,sqale_rating,sqale_rating_letra,code_smells,software_quality_maintainability_remediation_effort,software_quality_maintainability_debt_ratio,software_quality_maintainability_rating,software_quality_maintainability_rating_letra,software_quality_maintainability_issues,duplicated_lines_density,coverage,violations
+prueba-pt4-jsoup-raices,18941,29856,9703,2130,206,5149,2916,675,0.1,1.0,A,32,635,0.1,1.0,A,30,1.5,89.0,55

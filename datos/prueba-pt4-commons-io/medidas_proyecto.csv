@@ -1,0 +1,2 @@
+proyecto,ncloc,lines,statements,functions,classes,complexity,cognitive_complexity,sqale_index,sqale_debt_ratio,sqale_rating,sqale_rating_letra,code_smells,software_quality_maintainability_remediation_effort,software_quality_maintainability_debt_ratio,software_quality_maintainability_rating,software_quality_maintainability_rating_letra,software_quality_maintainability_issues,duplicated_lines_density,coverage,violations
+prueba-pt4-commons-io,21181,62155,7719,3177,365,5008,2361,635,0.1,1.0,A,65,640,0.1,1.0,A,66,0.7,89.7,96

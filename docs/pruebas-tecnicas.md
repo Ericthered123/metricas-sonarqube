@@ -167,18 +167,51 @@ Corrida: jsoup 1.22.2 y 1.23.2 bajo `prueba-pt3-jsoup`, sin tests. Período info
 
 **Qué confirma.** Que se puede medir la cobertura, una de las cuatro condiciones del gate, en un proyecto que ya trae JaCoCo configurado (Commons IO) y en uno que no (jsoup), sin modificar los proyectos (decisión D2 bis).
 
-**Cómo se corre.**
+**Cómo se corre.** jsoup con los dos releases bajo la misma clave, para tener también la cobertura del código nuevo (`new_coverage`), y Commons IO con un release:
 
 ```
-python guiones/analizar.py commons-io 2.22.0 --clave prueba-pt4-commons-io --jacoco
+python guiones/analizar.py jsoup 1.22.2 --clave prueba-pt4-jsoup --jacoco
 python guiones/analizar.py jsoup 1.23.2 --clave prueba-pt4-jsoup --jacoco
-python guiones/exportar_medidas.py prueba-pt4-commons-io
 python guiones/exportar_medidas.py prueba-pt4-jsoup
+python guiones/analizar.py commons-io 2.22.0 --clave prueba-pt4-commons-io --jacoco
+python guiones/exportar_medidas.py prueba-pt4-commons-io
 ```
 
-La opción `--jacoco` agrega el agente de JaCoCo y el reporte XML desde la línea de comandos. Verificar que la columna `coverage` de `medidas_archivo.csv` tiene valores. En Commons IO, revisar en el log que el agente no quede declarado dos veces (el proyecto ya lo configura).
+`analizar.py` informa la cantidad de sesiones del reporte de JaCoCo (una por JVM que corrió con el agente) y las líneas cubiertas. Con una sola sesión, ninguna JVM de tests tuvo el agente y el resultado queda registrado como "cobertura dudosa".
 
-**Resultados.** Pendiente.
+**Primer intento: el agente por `argLine` no sirve para todo el corpus (2026-10-13).** El comando original agregaba `jacoco:prepare-agent` desde la línea de comandos. Ese goal pasa el agente a los tests por la propiedad `argLine`. Revisando los pom aparecieron tres situaciones distintas:
+
+| Proyecto | Configuración | Efecto con `prepare-agent` |
+| --- | --- | --- |
+| jsoup | Surefire fija `<argLine>-Xss640k</argLine>`, un literal | Pisa la propiedad: los tests unitarios corren sin agente. Failsafe no la fija, así que los de integración sí lo tienen |
+| commons-io, commons-collections | `@{argLine}` (`${argLine}` en commons-io 2.21.0). `commons-parent` activa su propio JaCoCo cuando existe `src/site/resources/profile.jacoco`, y los tres lo tienen | Dos agentes en la misma JVM (el del proyecto, de 0.8.12 a 0.8.15, y el nuestro) y un `jacoco:check` con `haltOnFailure=true` y umbrales del 90 % que puede cortar el build |
+| jfreechart | Nada | Funciona |
+
+Experimento en jsoup 1.23.2 (`prueba-pt4-jsoup-v1`): el análisis terminó bien y SonarQube informó 34,6 % de cobertura. Pero el `jacoco.xml` tenía una sola sesión, la de Failsafe: los 2.165 tests unitarios corrieron sin agente y solo los 46 de integración aportaron cobertura. `org.jsoup.safety`, que solo ejercitan tests unitarios, dio 0 %. Es un error de medición silencioso: el número es creíble y nada falla.
+
+**Método adoptado.** El agente entra por la variable de entorno `JAVA_TOOL_OPTIONS`, que lee toda JVM que arranca, incluidas las de Surefire y Failsafe. El JaCoCo propio del proyecto se apaga con `-Djacoco.skip=true`. El reporte lo genera la CLI de JaCoCo, de la misma versión. El agente solo instrumenta el paquete raíz del proyecto, que se detecta a partir de `src/main/java`. Así el instrumento de medición es el mismo en los cuatro proyectos y no depende de cómo configura cada uno su build. Detalle en el docstring de `analizar.py`.
+
+**Resultados (2026-10-13).** D2 bis confirmada: la cobertura se mide en los proyectos del corpus con un mismo comando (`analizar.py ... --jacoco`), sin modificarlos.
+
+| | jsoup 1.23.2, primer intento (`argLine`) | jsoup 1.23.2, método adoptado | commons-io 2.22.0, método adoptado |
+| --- | --- | --- | --- |
+| Sesiones de JaCoCo | 1 | 4 | 277 |
+| Líneas cubiertas (JaCoCo) | 38,5 % | 90,6 % (9.764 de 10.777) | 91,0 % (8.562 de 9.408) |
+| Ramas cubiertas (JaCoCo) | 28,0 % | 86,2 % | 86,6 % |
+| `coverage` del proyecto (SonarQube) | 34,6 % | 89,0 % | 89,7 % |
+
+* **jsoup, código nuevo.** Con 1.22.2 y 1.23.2 bajo `prueba-pt4-jsoup`: `new_coverage` = 91,7 % sobre 1.201 líneas por cubrir, y la condición se aprueba (umbral 80). El gate queda rechazado solo por `new_violations` = 3, los mismos issues de la PT3. Es la primera corrida con las cuatro condiciones del gate evaluadas con valores reales. En 1.22.2, JaCoCo da 90,2 % de líneas y 86,0 % de ramas.
+* **jsoup, paquetes.** `org.jsoup.safety` pasa de 0 % a 100 %. `org.jsoup.examples` tiene 0 %: es código de ejemplo que ningún test ejecuta, pero SonarQube lo cuenta igual.
+* **commons-io.** El log muestra "Skipping JaCoCo execution because property jacoco.skip is set" para el JaCoCo propio (0.8.14), y el `@{argLine}` del pom no rompió Surefire: corrieron los 6.301 tests, con las 11 fallas de permisos de siempre (ver SCRUM-22). Las 277 sesiones se explican porque el pom fija `reuseForks=false`: una JVM por clase de test, todas con el agente. Los 22 archivos Java sin cobertura son 15 `package-info.java` y 7 interfaces o enums sin código ejecutable, que no tienen líneas por cubrir.
+* **commons-collections y jfreechart** no se probaron. commons-collections tiene la misma configuración que commons-io (perfil de `commons-parent`) y jfreechart no configura nada. El control de sesiones de `analizar.py` los cubre en la corrida de producción.
+
+**Problemas encontrados y corregidos en el camino.**
+
+* La CLI de JaCoCo no crea la carpeta del reporte: los dos primeros análisis de `prueba-pt4-jsoup` fallaron por eso (quedan como "falla" en `registro_analisis.csv`).
+* Al separar el escáner en otra invocación de Maven se perdían las carpetas de código que agrega build-helper: en jsoup, `src/test/java11`. Se notó porque `new_lines` del proyecto bajó de 5.325 (PT3) a 5.098 y desapareció un issue. Ahora el paso del escáner repite las fases hasta `process-test-resources`. Verificado con `prueba-pt4-jsoup-raices`: 55 issues, entre ellos el de `src/test/java11`, y la misma cobertura (89,0 %). El código principal no se había visto afectado (mismo `new_lines` por archivo que en la PT3).
+* `ConnectIT.canInterruptDocumentRead` (jsoup 1.22.2) falló una vez y pasó en la corrida siguiente. Mide si una lectura se interrumpe a tiempo, así que es sensible a la velocidad: se considera inestable y no se atribuye al agente.
+
+**Lección de método.** El primer intento no falló: dio un número creíble (34,6 %) medido con 46 de 2.211 tests. Lo que lo detectó fue contrastar con información independiente: las sesiones del reporte y la cobertura por paquete. Por eso `analizar.py` ahora cuenta las sesiones en cada análisis con cobertura.
 
 ## Compilación del corpus (SCRUM-22)
 

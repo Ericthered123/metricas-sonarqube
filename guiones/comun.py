@@ -366,7 +366,7 @@ def correr_en_herramientas(
         for linea in proceso.stdout:
             log.write(linea)
             # En consola solo se muestran las líneas que marcan el avance del build.
-            if linea.startswith(("[INFO] Building ", "[INFO] BUILD", "[ERROR]", "[INFO] ANALYSIS SUCCESSFUL")):
+            if linea.startswith(("[INFO] Building ", "[INFO] BUILD", "[ERROR]", "[INFO] QUALITY GATE STATUS")):
                 print("    " + linea.rstrip(), flush=True)
         codigo = proceso.wait()
     return codigo, time.monotonic() - inicio
