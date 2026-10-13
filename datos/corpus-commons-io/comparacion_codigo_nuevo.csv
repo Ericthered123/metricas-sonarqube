@@ -1,0 +1,371 @@
+archivo,ambito,estado_real,agregadas,agregadas_codigo,new_lines,new_violations,issues_nuevos
+src/main/java/org/apache/commons/io/ByteBuffers.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/ByteOrderMark.java,main,modificado,12,0,12,0,0
+src/main/java/org/apache/commons/io/ByteOrderParser.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/Charsets.java,main,modificado,40,0,40,0,0
+src/main/java/org/apache/commons/io/CloseableURLConnection.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/CopyUtils.java,main,modificado,43,0,43,0,0
+src/main/java/org/apache/commons/io/DirectoryWalker.java,main,modificado,78,1,78,0,0
+src/main/java/org/apache/commons/io/EndianUtils.java,main,modificado,130,28,128,3,3
+src/main/java/org/apache/commons/io/FileCleaner.java,main,modificado,18,0,18,0,0
+src/main/java/org/apache/commons/io/FileCleaningTracker.java,main,modificado,52,11,52,0,0
+src/main/java/org/apache/commons/io/FileDeleteStrategy.java,main,modificado,15,1,15,0,0
+src/main/java/org/apache/commons/io/FileExistsException.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/FileSystem.java,main,modificado,13,0,13,0,0
+src/main/java/org/apache/commons/io/FileSystemUtils.java,main,modificado,11,0,11,0,0
+src/main/java/org/apache/commons/io/FileUtils.java,main,modificado,216,1,216,0,0
+src/main/java/org/apache/commons/io/FilenameUtils.java,main,modificado,132,15,126,1,1
+src/main/java/org/apache/commons/io/HexDump.java,main,modificado,23,0,23,0,0
+src/main/java/org/apache/commons/io/IO.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/IOCase.java,main,modificado,6,0,6,0,0
+src/main/java/org/apache/commons/io/IOExceptionList.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/IOExceptionWithCause.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/IOIndexedException.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/IORandomAccessFile.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/IOUtils.java,main,modificado,617,38,404,2,2
+src/main/java/org/apache/commons/io/LineIterator.java,main,modificado,15,2,15,0,0
+src/main/java/org/apache/commons/io/RandomAccessFileMode.java,main,modificado,8,0,8,0,0
+src/main/java/org/apache/commons/io/RandomAccessFiles.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/StandardLineSeparator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/StreamIterator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/TaggedIOException.java,main,modificado,9,0,9,0,0
+src/main/java/org/apache/commons/io/ThreadMonitor.java,main,modificado,3,2,3,0,0
+src/main/java/org/apache/commons/io/ThreadUtils.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/UncheckedIOExceptions.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/build/AbstractOrigin.java,main,modificado,121,58,121,0,0
+src/main/java/org/apache/commons/io/build/AbstractOriginSupplier.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/build/AbstractStreamBuilder.java,main,modificado,29,5,29,0,0
+src/main/java/org/apache/commons/io/build/AbstractSupplier.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/build/package-info.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/channels/ByteArraySeekableByteChannel.java,main,modificado,119,66,118,0,0
+src/main/java/org/apache/commons/io/channels/CloseShieldChannel.java,main,modificado,7,0,7,0,0
+src/main/java/org/apache/commons/io/channels/CloseShieldChannelHandler.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/channels/FileChannels.java,main,modificado,2,1,2,0,0
+src/main/java/org/apache/commons/io/channels/FilterByteChannel.java,main,agregado,125,43,126,1,1
+src/main/java/org/apache/commons/io/channels/FilterChannel.java,main,agregado,146,48,147,0,0
+src/main/java/org/apache/commons/io/channels/FilterFileChannel.java,main,agregado,220,119,221,0,0
+src/main/java/org/apache/commons/io/channels/FilterReadableByteChannel.java,main,agregado,120,39,121,2,2
+src/main/java/org/apache/commons/io/channels/FilterSeekableByteChannel.java,main,agregado,134,50,135,3,3
+src/main/java/org/apache/commons/io/channels/FilterWritableByteChannel.java,main,agregado,120,39,121,2,2
+src/main/java/org/apache/commons/io/channels/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/charset/CharsetDecoders.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/charset/CharsetEncoders.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/charset/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/comparator/AbstractFileComparator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/comparator/CompositeFileComparator.java,main,modificado,5,0,5,0,0
+src/main/java/org/apache/commons/io/comparator/DefaultFileComparator.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/comparator/DirectoryFileComparator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/comparator/ExtensionFileComparator.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/comparator/LastModifiedFileComparator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/comparator/NameFileComparator.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/comparator/PathFileComparator.java,main,modificado,5,0,5,0,0
+src/main/java/org/apache/commons/io/comparator/ReverseFileComparator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/comparator/SizeFileComparator.java,main,modificado,3,0,3,0,0
+src/main/java/org/apache/commons/io/comparator/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/file/AccumulatorPathVisitor.java,main,modificado,6,0,6,0,0
+src/main/java/org/apache/commons/io/file/CleaningPathVisitor.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/file/CopyDirectoryVisitor.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/file/Counters.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/file/CountingPathVisitor.java,main,modificado,1,1,1,0,0
+src/main/java/org/apache/commons/io/file/DeleteOption.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/file/DeletingPathVisitor.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/file/DirectoryStreamFilter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/file/FilesUncheck.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/file/NoopPathVisitor.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/file/PathFilter.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/file/PathUtils.java,main,modificado,42,1,42,0,0
+src/main/java/org/apache/commons/io/file/PathVisitor.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/file/SimplePathVisitor.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/file/StandardDeleteOption.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/file/attribute/FileTimes.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/file/attribute/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/file/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/file/spi/FileSystemProviders.java,main,modificado,3,0,3,0,0
+src/main/java/org/apache/commons/io/file/spi/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/filefilter/AbstractFileFilter.java,main,modificado,6,0,6,0,0
+src/main/java/org/apache/commons/io/filefilter/AgeFileFilter.java,main,modificado,9,0,9,0,0
+src/main/java/org/apache/commons/io/filefilter/AndFileFilter.java,main,modificado,6,0,6,0,0
+src/main/java/org/apache/commons/io/filefilter/CanExecuteFileFilter.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/filefilter/CanReadFileFilter.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/filefilter/CanWriteFileFilter.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/filefilter/ConditionalFileFilter.java,main,modificado,5,0,5,0,0
+src/main/java/org/apache/commons/io/filefilter/DelegateFileFilter.java,main,modificado,9,0,9,0,0
+src/main/java/org/apache/commons/io/filefilter/DirectoryFileFilter.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/filefilter/EmptyFileFilter.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/filefilter/FalseFileFilter.java,main,modificado,7,0,7,0,0
+src/main/java/org/apache/commons/io/filefilter/FileEqualsFileFilter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/filefilter/FileFileFilter.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/filefilter/FileFilterUtils.java,main,modificado,73,0,73,0,0
+src/main/java/org/apache/commons/io/filefilter/HiddenFileFilter.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/filefilter/IOFileFilter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/filefilter/MagicNumberFileFilter.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/filefilter/NameFileFilter.java,main,modificado,25,0,25,0,0
+src/main/java/org/apache/commons/io/filefilter/NotFileFilter.java,main,modificado,10,0,10,0,0
+src/main/java/org/apache/commons/io/filefilter/OrFileFilter.java,main,modificado,5,0,5,0,0
+src/main/java/org/apache/commons/io/filefilter/PathEqualsFileFilter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/filefilter/PathMatcherFileFilter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/filefilter/PathVisitorFileFilter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/filefilter/PrefixFileFilter.java,main,modificado,25,0,25,0,0
+src/main/java/org/apache/commons/io/filefilter/RegexFileFilter.java,main,modificado,12,0,12,0,0
+src/main/java/org/apache/commons/io/filefilter/SizeFileFilter.java,main,modificado,10,0,10,0,0
+src/main/java/org/apache/commons/io/filefilter/SuffixFileFilter.java,main,modificado,25,0,25,0,0
+src/main/java/org/apache/commons/io/filefilter/SymbolicLinkFileFilter.java,main,modificado,3,0,3,0,0
+src/main/java/org/apache/commons/io/filefilter/TrueFileFilter.java,main,modificado,7,0,7,0,0
+src/main/java/org/apache/commons/io/filefilter/WildcardFileFilter.java,main,modificado,33,0,33,0,0
+src/main/java/org/apache/commons/io/filefilter/WildcardFilter.java,main,modificado,14,0,14,0,0
+src/main/java/org/apache/commons/io/filefilter/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/Constants.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/Erase.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/IOBaseStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/IOBaseStreamAdapter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/IOBiConsumer.java,main,modificado,9,0,9,0,0
+src/main/java/org/apache/commons/io/function/IOBiFunction.java,main,modificado,10,0,10,0,0
+src/main/java/org/apache/commons/io/function/IOBinaryOperator.java,main,modificado,6,0,6,0,0
+src/main/java/org/apache/commons/io/function/IOBooleanSupplier.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/function/IOComparator.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/function/IOConsumer.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/function/IOFunction.java,main,modificado,32,0,32,0,0
+src/main/java/org/apache/commons/io/function/IOIntConsumer.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/function/IOIntSupplier.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/function/IOIterable.java,main,modificado,3,0,3,0,0
+src/main/java/org/apache/commons/io/function/IOIterator.java,main,modificado,6,0,6,0,0
+src/main/java/org/apache/commons/io/function/IOIteratorAdapter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/IOLongSupplier.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/function/IOPredicate.java,main,modificado,12,0,12,0,0
+src/main/java/org/apache/commons/io/function/IOQuadFunction.java,main,modificado,14,0,14,0,0
+src/main/java/org/apache/commons/io/function/IORunnable.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/IOSpliterator.java,main,modificado,9,0,9,0,0
+src/main/java/org/apache/commons/io/function/IOSpliteratorAdapter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/IOStream.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/function/IOStreamAdapter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/IOStreams.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/IOSupplier.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/IOTriConsumer.java,main,modificado,12,0,12,0,0
+src/main/java/org/apache/commons/io/function/IOTriFunction.java,main,modificado,12,0,12,0,0
+src/main/java/org/apache/commons/io/function/IOUnaryOperator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/Uncheck.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/UncheckedIOBaseStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/UncheckedIOIterable.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/function/UncheckedIOIterator.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/function/UncheckedIOSpliterator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/function/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/AbstractCharacterFilterReader.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/input/AbstractInputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/AbstractLineEndingInputStream.java,main,agregado,67,23,68,0,0
+src/main/java/org/apache/commons/io/input/AutoCloseInputStream.java,main,modificado,5,0,5,0,0
+src/main/java/org/apache/commons/io/input/BOMInputStream.java,main,modificado,79,11,79,5,5
+src/main/java/org/apache/commons/io/input/BoundedInputStream.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/input/BoundedReader.java,main,modificado,23,11,23,0,0
+src/main/java/org/apache/commons/io/input/BrokenInputStream.java,main,modificado,1,0,0,0,0
+src/main/java/org/apache/commons/io/input/BrokenReader.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/BufferedFileChannelInputStream.java,main,modificado,6,1,6,0,0
+src/main/java/org/apache/commons/io/input/ByteBufferCleaner.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/CharSequenceInputStream.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/input/CharSequenceReader.java,main,modificado,13,0,13,0,0
+src/main/java/org/apache/commons/io/input/CharacterFilterReader.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/CharacterSetFilterReader.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/ChecksumInputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/CircularInputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/ClassLoaderObjectInputStream.java,main,modificado,12,0,12,0,0
+src/main/java/org/apache/commons/io/input/CloseShieldInputStream.java,main,modificado,67,26,67,0,0
+src/main/java/org/apache/commons/io/input/CloseShieldReader.java,main,modificado,3,0,3,0,0
+src/main/java/org/apache/commons/io/input/ClosedInputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/ClosedReader.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/CountingInputStream.java,main,modificado,10,0,10,0,0
+src/main/java/org/apache/commons/io/input/DemuxInputStream.java,main,modificado,5,0,5,0,0
+src/main/java/org/apache/commons/io/input/InfiniteCircularInputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/Input.java,main,modificado,20,7,20,1,1
+src/main/java/org/apache/commons/io/input/MarkShieldInputStream.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/input/MemoryMappedFileInputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/MessageDigestCalculatingInputStream.java,main,modificado,6,0,6,0,0
+src/main/java/org/apache/commons/io/input/MessageDigestInputStream.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/input/NullInputStream.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/input/NullReader.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/input/ObservableInputStream.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/input/ProxyInputStream.java,main,modificado,7,0,7,0,0
+src/main/java/org/apache/commons/io/input/ProxyReader.java,main,modificado,66,7,66,0,0
+src/main/java/org/apache/commons/io/input/QueueInputStream.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/input/RandomAccessFileInputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/ReadAheadInputStream.java,main,modificado,25,12,25,0,0
+src/main/java/org/apache/commons/io/input/ReaderInputStream.java,main,modificado,20,1,20,0,0
+src/main/java/org/apache/commons/io/input/ReversedLinesFileReader.java,main,modificado,46,19,44,1,1
+src/main/java/org/apache/commons/io/input/SequenceReader.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/input/SwappedDataInputStream.java,main,modificado,38,0,38,0,0
+src/main/java/org/apache/commons/io/input/TaggedInputStream.java,main,modificado,6,0,6,0,0
+src/main/java/org/apache/commons/io/input/TaggedReader.java,main,modificado,6,0,6,0,0
+src/main/java/org/apache/commons/io/input/Tailer.java,main,modificado,18,0,18,0,0
+src/main/java/org/apache/commons/io/input/TailerListener.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/TailerListenerAdapter.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/input/TeeInputStream.java,main,modificado,16,0,16,0,0
+src/main/java/org/apache/commons/io/input/TeeReader.java,main,modificado,19,0,19,0,0
+src/main/java/org/apache/commons/io/input/ThrottledInputStream.java,main,modificado,24,3,24,0,0
+src/main/java/org/apache/commons/io/input/TimestampedObserver.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/UncheckedBufferedReader.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/UncheckedFilterInputStream.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/input/UncheckedFilterReader.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/UnixLineEndingInputStream.java,main,modificado,10,6,10,0,0
+src/main/java/org/apache/commons/io/input/UnsupportedOperationExceptions.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/input/UnsynchronizedBufferedInputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/UnsynchronizedBufferedReader.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/input/UnsynchronizedByteArrayInputStream.java,main,modificado,9,1,9,0,0
+src/main/java/org/apache/commons/io/input/UnsynchronizedFilterInputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/UnsynchronizedReader.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/WindowsLineEndingInputStream.java,main,modificado,2,2,2,0,0
+src/main/java/org/apache/commons/io/input/XmlStreamReader.java,main,modificado,152,68,152,2,2
+src/main/java/org/apache/commons/io/input/XmlStreamReaderException.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/buffer/CircularBufferInputStream.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/input/buffer/CircularByteBuffer.java,main,modificado,10,0,10,0,0
+src/main/java/org/apache/commons/io/input/buffer/PeekableInputStream.java,main,modificado,7,0,7,0,0
+src/main/java/org/apache/commons/io/input/buffer/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/input/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/monitor/FileAlterationListener.java,main,modificado,8,0,8,0,0
+src/main/java/org/apache/commons/io/monitor/FileAlterationListenerAdaptor.java,main,modificado,8,0,8,0,0
+src/main/java/org/apache/commons/io/monitor/FileAlterationMonitor.java,main,modificado,10,3,10,0,0
+src/main/java/org/apache/commons/io/monitor/FileAlterationObserver.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/monitor/FileEntry.java,main,modificado,19,0,19,0,0
+src/main/java/org/apache/commons/io/monitor/SerializableFileTime.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/monitor/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/AbstractByteArrayOutputStream.java,main,modificado,8,2,8,0,0
+src/main/java/org/apache/commons/io/output/AppendableOutputStream.java,main,modificado,3,0,3,0,0
+src/main/java/org/apache/commons/io/output/AppendableWriter.java,main,modificado,4,0,4,0,0
+src/main/java/org/apache/commons/io/output/BrokenOutputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/BrokenWriter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/ByteArrayOutputStream.java,main,modificado,8,0,8,0,0
+src/main/java/org/apache/commons/io/output/ChunkedOutputStream.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/output/ChunkedWriter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/CloseShieldOutputStream.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/output/CloseShieldWriter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/ClosedOutputStream.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/output/ClosedWriter.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/output/CountingOutputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/DeferredFileOutputStream.java,main,modificado,3,0,3,0,0
+src/main/java/org/apache/commons/io/output/DemuxOutputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/FileWriterWithEncoding.java,main,modificado,1,1,1,0,0
+src/main/java/org/apache/commons/io/output/FilterCollectionWriter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/FlushShieldOutputStream.java,main,agregado,119,28,120,0,0
+src/main/java/org/apache/commons/io/output/LockableFileWriter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/NullAppendable.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/NullOutputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/NullPrintStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/NullWriter.java,main,modificado,1,0,1,0,0
+src/main/java/org/apache/commons/io/output/ProxyCollectionWriter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/ProxyOutputStream.java,main,modificado,7,1,7,0,0
+src/main/java/org/apache/commons/io/output/ProxyWriter.java,main,modificado,37,7,37,0,0
+src/main/java/org/apache/commons/io/output/QueueOutputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/RandomAccessFileOutputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/StringBuilderWriter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/TaggedOutputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/TaggedWriter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/TeeOutputStream.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/output/TeeWriter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/ThresholdingOutputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/UncheckedAppendable.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/UncheckedAppendableImpl.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/UncheckedFilterOutputStream.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/UncheckedFilterWriter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/UnsynchronizedByteArrayOutputStream.java,main,modificado,7,0,7,0,0
+src/main/java/org/apache/commons/io/output/WriterOutputStream.java,main,modificado,18,13,18,0,0
+src/main/java/org/apache/commons/io/output/XmlStreamWriter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/output/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/serialization/ClassNameMatcher.java,main,modificado,2,0,2,0,0
+src/main/java/org/apache/commons/io/serialization/FullClassNameMatcher.java,main,modificado,2,1,2,0,0
+src/main/java/org/apache/commons/io/serialization/ObjectStreamClassPredicate.java,main,modificado,5,0,5,0,0
+src/main/java/org/apache/commons/io/serialization/RegexpClassNameMatcher.java,main,modificado,3,0,3,0,0
+src/main/java/org/apache/commons/io/serialization/ValidatingObjectInputStream.java,main,modificado,51,1,51,0,0
+src/main/java/org/apache/commons/io/serialization/WildcardClassNameMatcher.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/apache/commons/io/serialization/package-info.java,main,modificado,2,0,2,0,0
+src/test/java/org/apache/commons/io/CharsetsTest.java,test,modificado,1,0,,,0
+src/test/java/org/apache/commons/io/DirectoryWalkerTest.java,test,modificado,10,6,,,0
+src/test/java/org/apache/commons/io/FileCleaningTrackerTest.java,test,modificado,34,29,,,2
+src/test/java/org/apache/commons/io/FileDeleteStrategyTest.java,test,modificado,1,0,,,0
+src/test/java/org/apache/commons/io/FileSystemUtilsTest.java,test,modificado,5,4,,,0
+src/test/java/org/apache/commons/io/FileUtilsCleanDirectoryTest.java,test,modificado,6,5,,,0
+src/test/java/org/apache/commons/io/FileUtilsCleanSymlinksTest.java,test,modificado,4,4,,,0
+src/test/java/org/apache/commons/io/FileUtilsCopyDirectoryToDirectoryTest.java,test,modificado,7,7,,,0
+src/test/java/org/apache/commons/io/FileUtilsCopyToFileTest.java,test,modificado,2,0,,,0
+src/test/java/org/apache/commons/io/FileUtilsDirectoryContainsTest.java,test,modificado,3,0,,,0
+src/test/java/org/apache/commons/io/FileUtilsFileNewerTest.java,test,modificado,5,0,,,0
+src/test/java/org/apache/commons/io/FileUtilsTest.java,test,modificado,99,88,,,0
+src/test/java/org/apache/commons/io/FileUtilsWaitForTest.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/FilenameUtilsTest.java,test,modificado,23,15,,,1
+src/test/java/org/apache/commons/io/IOUtilsConcurrentTest.java,test,modificado,7,0,,,0
+src/test/java/org/apache/commons/io/IOUtilsTest.java,test,modificado,64,55,,,0
+src/test/java/org/apache/commons/io/LineIteratorTest.java,test,modificado,10,0,,,0
+src/test/java/org/apache/commons/io/ThreadMonitorTest.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/build/AbstractStreamBuilderTest.java,test,modificado,64,51,,,0
+src/test/java/org/apache/commons/io/build/URIOriginTest.java,test,modificado,53,46,,,0
+src/test/java/org/apache/commons/io/channels/AbstractSeekableByteChannelTest.java,test,modificado,29,25,,,0
+src/test/java/org/apache/commons/io/channels/ByteArraySeekableByteChannelCompressTest.java,test,modificado,37,31,,,0
+src/test/java/org/apache/commons/io/channels/ByteArraySeekableByteChannelTest.java,test,modificado,121,110,,,2
+src/test/java/org/apache/commons/io/channels/CloseShieldChannelFilterByteChannelTest.java,test,agregado,168,121,,,2
+src/test/java/org/apache/commons/io/channels/FileChannelsTest.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/channels/FilterByteChannelTest.java,test,agregado,143,107,,,1
+src/test/java/org/apache/commons/io/channels/FilterChannelTest.java,test,agregado,93,61,,,2
+src/test/java/org/apache/commons/io/channels/FilterFileChannelTest.java,test,agregado,450,376,,,3
+src/test/java/org/apache/commons/io/channels/FilterReadableByteChannelTest.java,test,agregado,133,98,,,2
+src/test/java/org/apache/commons/io/channels/FilterSeekableByteChannelTest.java,test,agregado,220,169,,,2
+src/test/java/org/apache/commons/io/channels/FilterWritableByteChannelTest.java,test,agregado,132,97,,,2
+src/test/java/org/apache/commons/io/channels/FixedReadSizeFileChannelProxy.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/channels/NonBlockingFileChannelProxy.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/file/AbstractTempDirTest.java,test,modificado,25,19,,,0
+src/test/java/org/apache/commons/io/file/AccumulatorPathVisitorTest.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/file/CleaningPathVisitorTest.java,test,modificado,2,2,,,0
+src/test/java/org/apache/commons/io/file/CountersEqualsAndHashCodeTest.java,test,modificado,21,20,,,0
+src/test/java/org/apache/commons/io/file/CountingPathVisitorTest.java,test,modificado,3,3,,,0
+src/test/java/org/apache/commons/io/file/DeletingPathVisitorTest.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/file/FilesUncheckTest.java,test,modificado,47,35,,,1
+src/test/java/org/apache/commons/io/file/PathUtilsCleanDirectoryTest.java,test,modificado,6,6,,,0
+src/test/java/org/apache/commons/io/file/PathUtilsCopyTest.java,test,agregado,461,274,,,4
+src/test/java/org/apache/commons/io/file/PathUtilsDeleteFileTest.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/file/PathUtilsIsEmptyTest.java,test,modificado,11,10,,,0
+src/test/java/org/apache/commons/io/file/PathUtilsTest.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/file/TempDirectory.java,test,modificado,2,0,,,0
+src/test/java/org/apache/commons/io/file/TempDirectoryTest.java,test,modificado,6,5,,,0
+src/test/java/org/apache/commons/io/file/TempFile.java,test,modificado,2,0,,,0
+src/test/java/org/apache/commons/io/file/TempFileTest.java,test,modificado,6,5,,,0
+src/test/java/org/apache/commons/io/filefilter/FileFilterTest.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/filefilter/RegexFileFilterTest.java,test,modificado,1,0,,,0
+src/test/java/org/apache/commons/io/filefilter/SymbolicLinkFileFilterTest.java,test,modificado,1,0,,,0
+src/test/java/org/apache/commons/io/function/IOBiFunctionTest.java,test,modificado,2,0,,,0
+src/test/java/org/apache/commons/io/function/IOIterableTest.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/function/IOQuadFunctionTest.java,test,modificado,2,0,,,0
+src/test/java/org/apache/commons/io/function/IORunnableTest.java,test,modificado,1,0,,,0
+src/test/java/org/apache/commons/io/function/IOTriFunctionTest.java,test,modificado,2,0,,,0
+src/test/java/org/apache/commons/io/function/UncheckTest.java,test,modificado,10,8,,,0
+src/test/java/org/apache/commons/io/input/BOMInputStreamTest.java,test,modificado,29,27,,,0
+src/test/java/org/apache/commons/io/input/BoundedReaderTest.java,test,modificado,13,13,,,0
+src/test/java/org/apache/commons/io/input/ChunkedReader.java,test,agregado,49,21,,,0
+src/test/java/org/apache/commons/io/input/CloseShieldInputStreamTest.java,test,modificado,27,25,,,1
+src/test/java/org/apache/commons/io/input/MemoryMappedFileInputStreamTest.java,test,modificado,1,1,,,0
+src/test/java/org/apache/commons/io/input/ProxyInputStreamTest.java,test,modificado,19,17,,,0
+src/test/java/org/apache/commons/io/input/ProxyReaderTest.java,test,modificado,21,15,,,0
+src/test/java/org/apache/commons/io/input/QueueInputStreamTest.java,test,modificado,5,1,,,0
+src/test/java/org/apache/commons/io/input/ReadAheadInputStreamTest.java,test,modificado,55,43,,,1
+src/test/java/org/apache/commons/io/input/ReversedLinesFileReaderSimpleTest.java,test,modificado,2,2,,,0
+src/test/java/org/apache/commons/io/input/TailerCloseTest.java,test,agregado,98,61,,,1
+src/test/java/org/apache/commons/io/input/TailerTest.java,test,modificado,21,21,,,0
+src/test/java/org/apache/commons/io/input/ThrottledInputStreamTest.java,test,modificado,20,17,,,0
+src/test/java/org/apache/commons/io/input/UnsynchronizedBufferedInputStreamTest.java,test,modificado,2,2,,,0
+src/test/java/org/apache/commons/io/input/UnsynchronizedBufferedReaderTest.java,test,modificado,28,15,,,3
+src/test/java/org/apache/commons/io/input/UnsynchronizedByteArrayInputStreamTest.java,test,modificado,8,8,,,0
+src/test/java/org/apache/commons/io/input/XmlStreamReaderTest.java,test,modificado,6,0,,,0
+src/test/java/org/apache/commons/io/input/XmlStreamReaderUtilitiesTest.java,test,modificado,2,2,,,0
+src/test/java/org/apache/commons/io/input/compatibility/XmlStreamReader.java,test,modificado,2,1,,,0
+src/test/java/org/apache/commons/io/jmh/IOUtilsContentEqualsInputStreamsBenchmark.java,test,modificado,4,4,,,0
+src/test/java/org/apache/commons/io/jmh/IOUtilsContentEqualsReadersBenchmark_2_22_0.java,test,agregado,254,199,,,0
+src/test/java/org/apache/commons/io/jmh/IOUtilsContentEqualsReadersBenchmark_2_9_0.java,test,agregado,240,192,,,0
+src/test/java/org/apache/commons/io/jmh/PathUtilsContentEqualsBenchmark.java,test,modificado,2,2,,,0
+src/test/java/org/apache/commons/io/monitor/AbstractMonitorTest.java,test,modificado,12,0,,,0
+src/test/java/org/apache/commons/io/monitor/CollectionFileListener.java,test,modificado,14,0,,,0
+src/test/java/org/apache/commons/io/monitor/FileAlterationMonitorTest.java,test,modificado,4,0,,,0
+src/test/java/org/apache/commons/io/output/ChunkedOutputStreamTest.java,test,modificado,2,0,,,0
+src/test/java/org/apache/commons/io/output/DeferredFileOutputStreamTest.java,test,modificado,11,0,,,0
+src/test/java/org/apache/commons/io/output/FlushShieldOutputStreamTest.java,test,agregado,135,90,,,0
+src/test/java/org/apache/commons/io/output/ProxyOutputStreamTest.java,test,modificado,32,31,,,1
+src/test/java/org/apache/commons/io/output/ProxyWriterTest.java,test,modificado,54,44,,,2
+src/test/java/org/apache/commons/io/output/WriterOutputStreamTest.java,test,modificado,16,15,,,0
+src/test/java/org/apache/commons/io/serialization/AbstractCloseableListTest.java,test,modificado,1,0,,,0
+src/test/java/org/apache/commons/io/serialization/ValidatingObjectInputStreamTest.java,test,modificado,46,40,,,1
+src/test/java/org/apache/commons/io/test/TestUtils.java,test,modificado,16,4,,,0
+src/test/java/org/apache/commons/io/test/ThrowOnFlushAndCloseOutputStream.java,test,modificado,2,0,,,0

@@ -11,3 +11,19 @@ fecha,clave,proyecto,version,commit,perfil,fecha_analisis,tests,jacoco,resultado
 2026-10-13T12:40:27,prueba-pt4-jsoup-raices,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,Sonar way core,,sí,sí,ok,229,analisis-prueba-pt4-jsoup-raices-1.23.2-20261013-124027.log
 2026-10-13T12:48:56,prueba-pt4-commons-io,commons-io,2.22.0,c14acc16f73e44a75b2062b17aacb26c4feda746,Sonar way core,,sí,sí,ok,1151,analisis-prueba-pt4-commons-io-2.22.0-20261013-124856.log
 2026-10-13T13:52:11,prueba-comp-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,Sonar way comprehensive,,no,no,ok,170,analisis-prueba-comp-jsoup-1.23.2-20261013-135211.log
+2026-10-13T15:01:54,corpus-jsoup,jsoup,1.22.2,ac28afe6e5bf96d39fd17c3e0a797a7585e1958c,Sonar way comprehensive,,sí,sí,ok,348,analisis-corpus-jsoup-1.22.2-20261013-150154.log
+2026-10-13T15:07:43,corpus-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,Sonar way comprehensive,,sí,sí,ok (gate rechazado),269,analisis-corpus-jsoup-1.23.2-20261013-150743.log
+2026-10-13T15:12:13,corpus-core-jsoup,jsoup,1.22.2,ac28afe6e5bf96d39fd17c3e0a797a7585e1958c,Sonar way core,,sí,sí,ok,314,analisis-corpus-core-jsoup-1.22.2-20261013-151213.log
+2026-10-13T15:17:29,corpus-core-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,Sonar way core,,sí,sí,ok (gate rechazado),232,analisis-corpus-core-jsoup-1.23.2-20261013-151729.log
+2026-10-13T15:21:22,corpus-jfreechart,jfreechart,1.5.5,cb8ff67d983bdee23f690851277e9d4bf10171d4,Sonar way comprehensive,,sí,sí,ok,818,analisis-corpus-jfreechart-1.5.5-20261013-152122.log
+2026-10-13T15:35:02,corpus-jfreechart,jfreechart,1.5.6,703427c2acf05f59a3660e03d1207b7ddc057412,Sonar way comprehensive,,sí,sí,ok (gate rechazado),799,analisis-corpus-jfreechart-1.5.6-20261013-153502.log
+2026-10-13T15:48:24,corpus-core-jfreechart,jfreechart,1.5.5,cb8ff67d983bdee23f690851277e9d4bf10171d4,Sonar way core,,sí,sí,ok,751,analisis-corpus-core-jfreechart-1.5.5-20261013-154824.log
+2026-10-13T16:00:58,corpus-core-jfreechart,jfreechart,1.5.6,703427c2acf05f59a3660e03d1207b7ddc057412,Sonar way core,,sí,sí,ok (gate rechazado),716,analisis-corpus-core-jfreechart-1.5.6-20261013-160058.log
+2026-10-13T16:12:57,corpus-commons-collections,commons-collections,4.5.0,7f7fb0244abc940a2e9dd28b67508c0483a58c3e,Sonar way comprehensive,,sí,sí,ok,635,analisis-corpus-commons-collections-4.5.0-20261013-161257.log
+2026-10-13T16:23:34,corpus-commons-collections,commons-collections,4.6.0,4107624de41aeed37985d2a069fad41992fd71a2,Sonar way comprehensive,,sí,sí,ok (gate rechazado),896,analisis-corpus-commons-collections-4.6.0-20261013-162334.log
+2026-10-13T16:38:33,corpus-core-commons-collections,commons-collections,4.5.0,7f7fb0244abc940a2e9dd28b67508c0483a58c3e,Sonar way core,,sí,sí,ok,629,analisis-corpus-core-commons-collections-4.5.0-20261013-163833.log
+2026-10-13T16:49:04,corpus-core-commons-collections,commons-collections,4.6.0,4107624de41aeed37985d2a069fad41992fd71a2,Sonar way core,,sí,sí,ok (gate rechazado),872,analisis-corpus-core-commons-collections-4.6.0-20261013-164904.log
+2026-10-13T17:03:39,corpus-commons-io,commons-io,2.21.0,54073d3b5fdd2985b98a48040ede95eb59c7ee53,Sonar way comprehensive,,sí,sí,ok,1150,analisis-corpus-commons-io-2.21.0-20261013-170339.log
+2026-10-13T17:22:52,corpus-commons-io,commons-io,2.22.0,c14acc16f73e44a75b2062b17aacb26c4feda746,Sonar way comprehensive,,sí,sí,ok (gate rechazado),1225,analisis-corpus-commons-io-2.22.0-20261013-172252.log
+2026-10-13T17:43:18,corpus-core-commons-io,commons-io,2.21.0,54073d3b5fdd2985b98a48040ede95eb59c7ee53,Sonar way core,,sí,sí,ok,1201,analisis-corpus-core-commons-io-2.21.0-20261013-174318.log
+2026-10-13T18:03:22,corpus-core-commons-io,commons-io,2.22.0,c14acc16f73e44a75b2062b17aacb26c4feda746,Sonar way core,,sí,sí,ok (gate rechazado),1231,analisis-corpus-core-commons-io-2.22.0-20261013-180322.log

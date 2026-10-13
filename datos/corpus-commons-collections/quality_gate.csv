@@ -1,0 +1,5 @@
+condicion,estado,comparador,umbral,valor
+(gate),ERROR,,,
+new_coverage,OK,LT,80,85.5
+new_duplicated_lines_density,ERROR,GT,3,6.08445
+new_violations,ERROR,GT,0,189

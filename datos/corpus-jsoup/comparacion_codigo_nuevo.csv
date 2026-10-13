@@ -1,0 +1,135 @@
+archivo,ambito,estado_real,agregadas,agregadas_codigo,new_lines,new_violations,issues_nuevos
+src/main/java/org/jsoup/Connection.java,main,modificado,4,4,4,0,0
+src/main/java/org/jsoup/HttpStatusException.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/Jsoup.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/Progress.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/SerializationException.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/UnsupportedMimeTypeException.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/examples/HtmlToPlainText.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/examples/ListLinks.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/examples/Wikipedia.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/examples/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/helper/AuthenticationHandler.java,main,modificado,3,3,3,0,0
+src/main/java/org/jsoup/helper/CookieUtil.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/helper/DataUtil.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/helper/HttpConnection.java,main,modificado,85,70,83,2,2
+src/main/java/org/jsoup/helper/Re2jRegex.java,main,modificado,8,8,7,1,1
+src/main/java/org/jsoup/helper/Regex.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/helper/RequestAuthenticator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/helper/RequestDispatch.java,main,modificado,3,3,3,0,0
+src/main/java/org/jsoup/helper/RequestExecutor.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/helper/UrlBuilder.java,main,modificado,5,5,5,1,1
+src/main/java/org/jsoup/helper/UrlConnectionExecutor.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/helper/Validate.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/helper/ValidationException.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/helper/W3CDom.java,main,modificado,229,184,214,1,1
+src/main/java/org/jsoup/helper/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/internal/ControllableInputStream.java,main,modificado,20,16,20,2,2
+src/main/java/org/jsoup/internal/Functions.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/internal/LineMap.java,main,agregado,79,52,80,3,3
+src/main/java/org/jsoup/internal/NamespaceBindings.java,main,agregado,103,69,104,3,3
+src/main/java/org/jsoup/internal/Normalizer.java,main,modificado,8,3,8,0,0
+src/main/java/org/jsoup/internal/QuietAppendable.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/internal/SharedConstants.java,main,modificado,7,4,7,7,7
+src/main/java/org/jsoup/internal/SimpleBufferedInput.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/internal/SimpleStreamReader.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/internal/SoftPool.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/internal/StringUtil.java,main,modificado,48,36,47,0,0
+src/main/java/org/jsoup/internal/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/nodes/Attribute.java,main,modificado,19,14,19,0,0
+src/main/java/org/jsoup/nodes/Attributes.java,main,modificado,126,98,125,0,0
+src/main/java/org/jsoup/nodes/CDataNode.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/nodes/Comment.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/nodes/DataNode.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/nodes/Document.java,main,modificado,4,3,4,0,0
+src/main/java/org/jsoup/nodes/DocumentType.java,main,modificado,7,5,7,0,0
+src/main/java/org/jsoup/nodes/Element.java,main,modificado,122,94,121,2,2
+src/main/java/org/jsoup/nodes/Entities.java,main,modificado,14,11,14,0,0
+src/main/java/org/jsoup/nodes/EntitiesData.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/nodes/FormElement.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/nodes/LeafNode.java,main,modificado,71,52,71,0,0
+src/main/java/org/jsoup/nodes/Node.java,main,modificado,93,71,93,1,1
+src/main/java/org/jsoup/nodes/NodeInternals.java,main,agregado,70,51,71,0,0
+src/main/java/org/jsoup/nodes/NodeIterator.java,main,modificado,2,2,2,0,0
+src/main/java/org/jsoup/nodes/NodeUtils.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/nodes/Printer.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/nodes/PseudoTextElement.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/nodes/Range.java,main,modificado,390,303,389,2,2
+src/main/java/org/jsoup/nodes/TextNode.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/nodes/XmlDeclaration.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/nodes/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/parser/CharacterReader.java,main,modificado,127,99,127,1,1
+src/main/java/org/jsoup/parser/HtmlTagOptions.java,main,agregado,73,61,74,15,15
+src/main/java/org/jsoup/parser/HtmlTreeBuilder.java,main,modificado,255,210,252,9,9
+src/main/java/org/jsoup/parser/HtmlTreeBuilderState.java,main,modificado,48,43,48,3,3
+src/main/java/org/jsoup/parser/ParseError.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/parser/ParseErrorList.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/parser/ParseSettings.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/parser/Parser.java,main,modificado,2,2,2,0,0
+src/main/java/org/jsoup/parser/StreamParser.java,main,modificado,74,57,73,2,2
+src/main/java/org/jsoup/parser/Tag.java,main,modificado,34,26,34,0,0
+src/main/java/org/jsoup/parser/TagSet.java,main,modificado,2,2,2,0,0
+src/main/java/org/jsoup/parser/Token.java,main,modificado,86,72,85,1,1
+src/main/java/org/jsoup/parser/TokenData.java,main,modificado,1,1,1,0,0
+src/main/java/org/jsoup/parser/TokenQueue.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/parser/Tokeniser.java,main,modificado,17,13,17,0,0
+src/main/java/org/jsoup/parser/TokeniserState.java,main,modificado,42,37,38,1,1
+src/main/java/org/jsoup/parser/TreeBuilder.java,main,modificado,76,58,76,0,0
+src/main/java/org/jsoup/parser/XmlTreeBuilder.java,main,modificado,40,33,38,0,0
+src/main/java/org/jsoup/parser/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/safety/Cleaner.java,main,modificado,14,14,13,1,1
+src/main/java/org/jsoup/safety/Safelist.java,main,modificado,6,6,6,0,0
+src/main/java/org/jsoup/safety/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/select/Collector.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/select/CombiningEvaluator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/select/Elements.java,main,modificado,59,39,59,0,0
+src/main/java/org/jsoup/select/Evaluator.java,main,modificado,3,3,3,0,0
+src/main/java/org/jsoup/select/NodeEvaluator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/select/NodeFilter.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/select/NodeTraversor.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/select/NodeVisitor.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/select/Nodes.java,main,modificado,1,1,1,0,0
+src/main/java/org/jsoup/select/QueryParser.java,main,modificado,5,5,5,0,0
+src/main/java/org/jsoup/select/Selector.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/select/StructuralEvaluator.java,main,sin cambios,0,0,0,0,0
+src/main/java/org/jsoup/select/package-info.java,main,sin cambios,0,0,0,0,0
+src/main/java11/org/jsoup/helper/HttpClientExecutor.java,main,modificado,82,66,,,0
+src/test/java/org/jsoup/MultiLocaleExtension.java,test,modificado,2,2,,,0
+src/test/java/org/jsoup/helper/HttpConnectionTest.java,test,modificado,68,56,,,2
+src/test/java/org/jsoup/helper/RegexTest.java,test,modificado,14,12,,,0
+src/test/java/org/jsoup/helper/W3CDomTest.java,test,modificado,283,219,,,0
+src/test/java/org/jsoup/integration/ConnectIT.java,test,modificado,63,54,,,5
+src/test/java/org/jsoup/integration/ConnectTest.java,test,modificado,262,213,,,0
+src/test/java/org/jsoup/integration/FuzzFixesTest.java,test,modificado,3,3,,,0
+src/test/java/org/jsoup/integration/ParserSoakIT.java,test,agregado,65,53,,,0
+src/test/java/org/jsoup/integration/TestServer.java,test,modificado,3,3,,,0
+src/test/java/org/jsoup/integration/netty/NettyProxyServer.java,test,modificado,67,50,,,0
+src/test/java/org/jsoup/integration/routes/SlowRider.java,test,modificado,12,12,,,3
+src/test/java/org/jsoup/internal/NamespaceBindingsTest.java,test,agregado,64,50,,,0
+src/test/java/org/jsoup/internal/SoftPoolTest.java,test,modificado,4,4,,,0
+src/test/java/org/jsoup/internal/StringUtilTest.java,test,modificado,38,29,,,0
+src/test/java/org/jsoup/nodes/AttributesTest.java,test,modificado,42,31,,,0
+src/test/java/org/jsoup/nodes/DocumentTest.java,test,modificado,20,16,,,0
+src/test/java/org/jsoup/nodes/DocumentTypeTest.java,test,modificado,9,6,,,0
+src/test/java/org/jsoup/nodes/ElementTest.java,test,modificado,132,104,,,3
+src/test/java/org/jsoup/nodes/EntitiesTest.java,test,modificado,31,19,,,0
+src/test/java/org/jsoup/nodes/NodeTest.java,test,modificado,77,65,,,1
+src/test/java/org/jsoup/parser/CharacterReaderTest.java,test,modificado,5,5,,,0
+src/test/java/org/jsoup/parser/HtmlParserTest.java,test,modificado,467,385,,,3
+src/test/java/org/jsoup/parser/HtmlTreeBuilderStateTest.java,test,modificado,1,1,,,0
+src/test/java/org/jsoup/parser/HtmlTreeBuilderTest.java,test,modificado,94,73,,,0
+src/test/java/org/jsoup/parser/ParserIT.java,test,modificado,0,0,,,0
+src/test/java/org/jsoup/parser/PositionTest.java,test,modificado,252,207,,,2
+src/test/java/org/jsoup/parser/StreamParserTest.java,test,modificado,250,200,,,1
+src/test/java/org/jsoup/parser/TagTest.java,test,modificado,22,19,,,0
+src/test/java/org/jsoup/parser/TokeniserStateTest.java,test,modificado,84,72,,,0
+src/test/java/org/jsoup/parser/TokeniserTest.java,test,modificado,21,18,,,0
+src/test/java/org/jsoup/parser/XmlTreeBuilderTest.java,test,modificado,65,48,,,0
+src/test/java/org/jsoup/safety/CleanerTest.java,test,modificado,65,47,,,0
+src/test/java/org/jsoup/select/ElementsTest.java,test,modificado,28,25,,,0
+src/test/java/org/jsoup/select/EvaluatorTest.java,test,modificado,1,1,,,0
+src/test/java/org/jsoup/select/SelectorTest.java,test,modificado,7,5,,,0
+src/test/java11/org/jsoup/helper/HttpClientExecutorTest.java,test,modificado,149,132,,,0
+src/test/java11/org/jsoup/helper/HttpClientTestAccess.java,test,modificado,37,32,,,0
+src/test/java11/org/jsoup/integration/HttpClientConnectIT.java,test,modificado,48,44,,,1
