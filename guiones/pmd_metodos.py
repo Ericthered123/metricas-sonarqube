@@ -32,8 +32,13 @@ Cómo se leen los valores (verificado en la prueba técnica 2, jsoup 1.23.2):
 * El tamaño del método es el NCSS (sentencias sin comentarios ni líneas en
   blanco): PMD no informa la línea final del método.
 
-PMD corre sobre el código fuente: no necesita SonarQube ni compilar. El
-conjunto de reglas está en laboratorio/pmd-metodos.xml.
+PMD corre sobre el código fuente y no necesita SonarQube. Desde SCRUM-29 se le
+pasa el classpath del proyecto (``--aux-classpath``: target/classes más las
+dependencias de compilación, que arma maven-dependency-plugin), para que
+resuelva los tipos como el compilador; sin él PMD avisa que el análisis es
+incompleto. Por eso la versión tiene que estar compilada (analizar.py lo hace).
+Además corre con un hilo por núcleo (``--threads 1C``), que no cambia los
+resultados. El conjunto de reglas está en laboratorio/pmd-metodos.xml.
 """
 
 from __future__ import annotations
@@ -77,6 +82,9 @@ ARCHIVO_REGLAS = RAIZ / "laboratorio" / "pmd-metodos.xml"
 
 # PMD termina con código 4 cuando encuentra infracciones: acá eso es lo esperado.
 CODIGOS_OK = {0, 4}
+# Plugin con versión fija para armar el classpath auxiliar (ver VERSIONES.md).
+PLUGIN_CLASSPATH = "org.apache.maven.plugins:maven-dependency-plugin:3.8.1:build-classpath"
+ARCHIVO_CLASSPATH = "target/classpath-pmd.txt"
 
 ESPACIO_REPORTE = {"p": "http://pmd.sourceforge.net/report/2.0.0"}
 # Valor que trae el mensaje de cada regla, por ejemplo
@@ -156,8 +164,25 @@ def correr(proyecto: str, version: str) -> None:
     def en_contenedor(ruta) -> str:
         return f"{DIR_TRABAJO_CONTENEDOR}/{ruta.relative_to(DIR_TRABAJO).as_posix()}"
 
+    # Classpath auxiliar: clases compiladas del proyecto + dependencias de compilación.
+    if not (corpus.directorio / "target" / "classes").exists():
+        salir(f"{proyecto} {version} no está compilado. Corré antes analizar.py sobre esa versión.")
+    log_classpath = DIR_LOGS / f"pmd-classpath-{proyecto}-{version}.log"
+    codigo, _ = correr_en_herramientas(
+        ["mvn", "-B", "-q", PLUGIN_CLASSPATH, f"-Dmdep.outputFile={ARCHIVO_CLASSPATH}",
+         "-Dmdep.includeScope=compile"],
+        corpus.directorio_contenedor, log_classpath,
+    )
+    archivo_classpath = corpus.directorio / ARCHIVO_CLASSPATH
+    if codigo != 0 or not archivo_classpath.exists():
+        salir(f"No se pudo armar el classpath de {proyecto} {version}. Revisar trabajo/logs/{log_classpath.name}")
+    dependencias = archivo_classpath.read_text(encoding="utf-8").strip()
+    classpath = ":".join(c for c in [f"{corpus.directorio_contenedor}/target/classes", dependencias] if c)
+
     comando = [
         "bash", en_contenedor(carpeta / "bin" / "pmd"), "check",
+        "--aux-classpath", classpath,
+        "--threads", "1C",
         "--dir", f"{corpus.directorio_contenedor}/src/main/java",
         "--rulesets", en_contenedor(DIR_HERRAMIENTAS / ARCHIVO_REGLAS.name),
         "--format", "xml",

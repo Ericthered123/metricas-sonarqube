@@ -10,7 +10,7 @@ Todo lo que puede cambiar una medición está fijado acá. Si alguien actualiza 
 | JDK de compilación y análisis | Eclipse Temurin 21 | ídem | Desde la versión 26.8, el escáner de SonarQube necesita Java 21. Los cuatro proyectos compilan con un JDK posterior al que exigen (8 u 11) |
 | Escáner de Maven (`sonar-maven-plugin`) | 5.8.0.7211 | `guiones/analizar.py` | Última versión publicada al montar el laboratorio |
 | JaCoCo (agente `org.jacoco.agent:runtime` y CLI `org.jacoco.cli:nodeps`) | 0.8.15 | `guiones/analizar.py` | Última versión publicada; soporta Java 21. Desde la PT4 se usan el agente y la CLI en lugar del plugin de Maven (ver el docstring de `analizar.py`) |
-| `maven-dependency-plugin` | 3.8.1 | `guiones/analizar.py` | Descarga el agente y la CLI de JaCoCo al repositorio de Maven del contenedor |
+| `maven-dependency-plugin` | 3.8.1 | `guiones/analizar.py`, `guiones/pmd_metodos.py` | Descarga el agente y la CLI de JaCoCo al repositorio de Maven del contenedor, y arma el classpath auxiliar de PMD |
 | Python (guiones) | 3.10 o posterior, solo biblioteca estándar | — | Sin dependencias que instalar |
 | PMD | 7.26.0 (`pmd-dist-7.26.0-bin.zip`, SHA-256 `9f55cb7ff0e9f9a66dd2f005eaa370e84c8a4cd971b134aa14a930c4a283ebc9`) | `guiones/pmd_metodos.py` | Estable vigente al 2026-10-13. Segunda implementación de la ciclomática y la cognitiva, y fuente del tamaño de cada método (eje 2). Corre en el contenedor de herramientas con su Java 21 |
 
