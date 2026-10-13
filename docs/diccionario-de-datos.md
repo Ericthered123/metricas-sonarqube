@@ -59,4 +59,12 @@ Primera fila: el estado global del gate (`OK` o `ERROR`). Las siguientes: una po
 
 ## `datos/extraccion-<proyecto>/complejidad_metodo.csv`
 
-Una fila por método. `ciclomatica` sale del mensaje de `java:S1541` y `cognitiva` del de `java:S3776`. `cognitiva_imputada` vale `sí` cuando el método no generó issue de `S3776`, lo que significa complejidad cognitiva 0.
+Una fila por método. `ciclomatica` sale del mensaje de `java:S1541` y `cognitiva` del de `java:S3776`. `cognitiva_origen` dice de dónde sale la cognitiva:
+
+| Valor | Significado |
+| --- | --- |
+| `issue` | Leída del mensaje de `S3776` |
+| `cero` | El método no generó issue de `S3776` y su ciclomática es 1 (ningún punto de decisión): la cognitiva es 0 |
+| `no medida` | El método no generó issue de `S3776` pero su ciclomática es mayor que 1. Todo punto de decisión suma al menos 1 a la cognitiva, así que no puede ser 0: SonarQube no la calculó. En jsoup son los métodos declarados dentro de constantes de enum y de clases anónimas. La celda `cognitiva` queda vacía y el método no entra en la correlación |
+
+No aparecen los métodos sin cuerpo (abstractos o de interfaces) ni `equals` y `hashCode`, que ninguna de las dos reglas informa. Por eso la cantidad de filas es menor que la medida `functions`.

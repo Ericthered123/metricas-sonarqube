@@ -72,11 +72,33 @@ python guiones/complejidad_por_metodo.py exportar jsoup
 * Que las dos reglas existen en la versión instalada y cómo se llama su parámetro de umbral (el guion lo lee de la definición de cada regla y lo informa).
 * Que los patrones de los mensajes coinciden: el guion avisa si algún mensaje no se pudo leer.
 * Cuántos métodos aparecen solo en una de las dos reglas. Los que tienen cognitiva 0 no generan issue de `S3776` y se imputan como 0.
-* Cómo obtener el tamaño de cada método: la ubicación del issue es el nombre del método, no su cuerpo, así que no sale de acá.
+* Cómo obtener el tamaño de cada método: la ubicación del issue es el nombre del método, no su cuerpo, así que no sale de acá. D5 lo necesita para la correlación controlada por tamaño.
+* Los controles que informa `exportar` (agregados el 2026-10-12): issues de `S3776` sin su par de `S1541` en la misma línea (tienen que ser 0), métodos extraídos contra la medida `functions` del proyecto (la diferencia esperable son los métodos sin cuerpo, de interfaces o abstractos) y métodos en archivos de test.
+
+**Hecho cuando.** Existe `datos/extraccion-jsoup/complejidad_metodo.csv`, los patrones leen todos los mensajes, el cruce entre reglas no deja huérfanos (o se explica por qué), y está decidido cómo se obtiene el tamaño del método.
+
+**Cambios previos a la corrida (2026-10-12).** El guion solo lee issues abiertos (`resolved=false`), consulta archivo por archivo si una regla supera el tope de 10.000 resultados de la API (jfreechart puede pasarlo) y no crea filas para mensajes que no reconoce. El mismo filtro de issues abiertos se agregó a `exportar_medidas.py`: sin él, en las claves `corpus-*` aparecerían los issues que se arreglaron entre un release y el otro.
 
 **Plan B.** Calcular ambas métricas con una herramienta externa.
 
-**Resultados.** Pendiente.
+**Resultados (2026-10-13).** El perfil de extracción funciona con umbral 0 en las dos reglas, los patrones leyeron todos los mensajes y el cruce entre reglas no dejó huérfanos. SonarQube procesó el análisis en 7 s (2.858 issues: 2.088 de `S1541` y 770 de `S3776`). El comando tardó 1.116 s, pero no por el análisis: Maven terminó a los 2:44 min y el resto fue la consola de Windows bloqueada en modo selección (ver más abajo).
+
+| Control | Resultado |
+| --- | --- |
+| Métodos extraídos | 2.088 en 85 archivos, ninguno de test |
+| Medida `functions` del proyecto | 2.130. La diferencia (42) son `equals` y `hashCode` (17 en el código, 0 en la extracción: ninguna de las dos reglas los informa) y métodos sin cuerpo |
+| Issues de `S3776` sin par de `S1541` | 0 |
+| Suma por archivo contra la medida del archivo | Ciclomática igual en 67 de 85 archivos, cognitiva en 76. En esos archivos la suma es menor que la medida: al menos parte de la diferencia son `equals` y `hashCode`, que las reglas no informan pero la medida del archivo sí cuenta. No se verificó método por método |
+
+**Hallazgo: SonarQube no calcula la complejidad cognitiva de los métodos declarados dentro de constantes de enum ni de clases anónimas.** Al clasificar cada método por el bloque que lo contiene, los 731 métodos de clases con nombre que tienen ciclomática mayor que 1 tienen todos cognitiva mayor que 0; en cambio, los 85 de constantes de enum y los 3 de clases anónimas con ciclomática mayor que 1 no generaron issue de `S3776`. No es que valgan 0: todo punto de decisión que cuenta la ciclomática suma al menos 1 a la cognitiva. La medida por archivo tampoco los cuenta: `HtmlTreeBuilderState.java` (la máquina de estados del parser, hecha con un enum) tiene ciclomática 539 y cognitiva 6, y su método `inBodyStartTag` tiene ciclomática 119 y ninguna cognitiva. Es un problema de cobertura del instrumento para el eje 2 (5.2) y para 6.2: el archivo más complejo de jsoup parece trivial según la cognitiva. Falta contrastarlo con la especificación de la métrica (Campbell, 2018), para saber si es una decisión de la especificación o de la implementación.
+
+**Consecuencia en el guion.** La primera versión imputaba 0 a todo método sin issue de `S3776`, lo que metía 88 ceros falsos. Ahora imputa 0 solo si la ciclomática es 1 y deja la cognitiva vacía (`no medida`) en los demás casos (ver el diccionario de datos).
+
+**Vista preliminar de la correlación** (Spearman, sin controlar el tamaño, solo para dimensionar; el análisis de 5.2 lo hace el integrante 3). Con los 88 ceros falsos: 0,852. Sin ellos (2.000 métodos): 0,975. Solo métodos con ciclomática mayor que 1 (744): 0,906. El error de imputación bajaba la correlación de forma notable, así que el tratamiento de los no medidos importa para el resultado.
+
+**Pendiente.** Decidir cómo se obtiene el tamaño de cada método, que D5 necesita para la correlación controlada.
+
+**La consola de Windows.** En la consola clásica de Windows, hacer clic o seleccionar texto la pone en modo selección, y cualquier programa que quiera escribir en ella se bloquea hasta que se sale de ese modo (Enter, Esc o Ctrl+C con texto seleccionado, que copia en lugar de interrumpir). El análisis quedó así 15 minutos después de terminar. Si un comando parece colgado, conviene apretar Esc en su ventana antes de cortarlo.
 
 ## Prueba técnica 3: Quality Gate sobre código nuevo entre dos releases (SCRUM-24)
 
@@ -94,7 +116,7 @@ Luego comparar las métricas de código nuevo (`new_lines`, `new_violations`) co
 
 **A tener en cuenta.** Al correr sin tests no hay cobertura, así que la condición "cobertura del código nuevo de al menos 80 %" va a fallar o quedar sin evaluar. No es un resultado: esta prueba mira si se detecta el código nuevo, no si el gate aprueba. La cobertura se prueba en la 4.
 
-La definición de código nuevo por defecto es "versión anterior", que se apoya en `sonar.projectVersion`; el guion la completa con la versión del corpus. Desde la versión 26.9, SonarQube fecha cada issue según el último cambio de la línea en git: como los checkouts no traen historia (`--depth 1`), hay que ver cómo afecta eso a la detección de código nuevo.
+La definición de código nuevo por defecto es "versión anterior", que se apoya en `sonar.projectVersion`; el guion la completa con la versión del corpus. Desde la versión 26.9, SonarQube fecha cada issue según el último cambio de la línea en git: como los checkouts no traen historia (`--depth 1`), hay que ver cómo afecta eso a la detección de código nuevo. La PT2 ya lo mostró: el análisis advierte "Shallow clone detected, no blame information will be provided" y "Missing blame information for 195 files" (todos los de jsoup), además de dos archivos de test con caracteres que no son UTF-8 (`HtmlParserTest.java` y `TokeniserStateTest.java`).
 
 **Plan B.** Un solo commit por proyecto y un gate propio con las mismas condiciones aplicadas a todo el código, declarado como limitación.
 

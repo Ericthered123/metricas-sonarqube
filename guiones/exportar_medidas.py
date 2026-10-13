@@ -181,28 +181,32 @@ def exportar_medidas_proyecto(cliente: ClienteSonar, clave: str, metricas: list[
 
 
 def _pagina_issues(cliente: ClienteSonar, clave: str, **filtros: str):
+    # resolved=false: solo issues abiertos. Sin este filtro la API devuelve también
+    # los cerrados, y en las claves corpus-* (dos releases bajo la misma clave)
+    # aparecerían los issues que se arreglaron entre una versión y la otra.
     return cliente.paginar(
         "/api/issues/search",
         "issues",
         componentKeys=clave,
+        resolved="false",
         additionalFields="_all",
         **filtros,
     )
 
 
 def exportar_issues(cliente: ClienteSonar, clave: str) -> list[dict]:
-    """Todos los issues abiertos del proyecto.
+    """Todos los issues abiertos del proyecto (los cerrados no se exportan).
 
     La API no devuelve más de 10.000 resultados por consulta. Si el proyecto
     tiene más, se parte la consulta por regla (ninguna regla sola debería
     superar el tope en este corpus) y se avisa si alguna lo supera.
     """
-    total = cliente.get("/api/issues/search", componentKeys=clave, ps=1).get("total", 0)
+    total = cliente.get("/api/issues/search", componentKeys=clave, resolved="false", ps=1).get("total", 0)
     if total <= ClienteSonar.LIMITE_ISSUES:
         crudos = list(_pagina_issues(cliente, clave))
     else:
         info(f"{total} issues: supera el tope de la API, se consulta regla por regla")
-        facetas = cliente.get("/api/issues/search", componentKeys=clave, ps=1, facets="rules")
+        facetas = cliente.get("/api/issues/search", componentKeys=clave, resolved="false", ps=1, facets="rules")
         reglas = [v["val"] for f in facetas.get("facets", []) if f["property"] == "rules" for v in f["values"]]
         crudos = []
         for regla in reglas:
