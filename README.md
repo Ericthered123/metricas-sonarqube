@@ -82,6 +82,12 @@ Resultados en `datos/prueba-pt1-jsoup/`.
 
 Las pruebas técnicas 2, 3 y 4 están descritas en [docs/pruebas-tecnicas.md](docs/pruebas-tecnicas.md).
 
+**7. Corrida de producción (SCRUM-27 y 28).** Analiza los cuatro proyectos, en sus dos releases y con los dos perfiles (16 análisis con tests y cobertura, unas dos horas y media), exporta los datos a `datos/corpus-*/` y verifica la configuración de cada clave. Se puede cortar y volver a lanzar: lo que ya terminó bien no se repite.
+
+```
+python guiones/correr_corpus.py
+```
+
 ## Apagar y limpiar
 
 ```
