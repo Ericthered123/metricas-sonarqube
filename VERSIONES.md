@@ -11,6 +11,7 @@ Todo lo que puede cambiar una medición está fijado acá. Si alguien actualiza 
 | Escáner de Maven (`sonar-maven-plugin`) | 5.8.0.7211 | `guiones/analizar.py` | Última versión publicada al montar el laboratorio |
 | JaCoCo (`jacoco-maven-plugin`) | 0.8.15 | `guiones/analizar.py` | Última versión publicada; soporta Java 21 |
 | Python (guiones) | 3.10 o posterior, solo biblioteca estándar | — | Sin dependencias que instalar |
+| PMD | 7.26.0 (`pmd-dist-7.26.0-bin.zip`, SHA-256 `9f55cb7ff0e9f9a66dd2f005eaa370e84c8a4cd971b134aa14a930c4a283ebc9`) | `guiones/pmd_metodos.py` | Estable vigente al 2026-10-13. Segunda implementación de la ciclomática y la cognitiva, y fuente del tamaño de cada método (eje 2). Corre en el contenedor de herramientas con su Java 21 |
 
 Las versiones se verificaron el 2026-10-12 contra las etiquetas de los repositorios oficiales (`SonarSource/docker-sonarqube`, `docker-library/official-images`, `SonarSource/sonar-scanner-maven`, `jacoco/jacoco`).
 
@@ -30,3 +31,4 @@ Se usan los valores de fábrica y no se modifican. `guiones/verificar_supuestos.
 | Fecha | Cambio |
 | --- | --- |
 | 2026-10-12 | Versiones iniciales del laboratorio |
+| 2026-10-13 | Se agrega PMD 7.26.0 para el eje 2 (huella verificada con dos descargas independientes) |

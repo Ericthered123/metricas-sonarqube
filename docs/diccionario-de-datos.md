@@ -68,3 +68,27 @@ Una fila por método. `ciclomatica` sale del mensaje de `java:S1541` y `cognitiv
 | `no medida` | El método no generó issue de `S3776` pero su ciclomática es mayor que 1. Todo punto de decisión suma al menos 1 a la cognitiva, así que no puede ser 0: SonarQube no la calculó. En jsoup son los métodos declarados dentro de constantes de enum y de clases anónimas. La celda `cognitiva` queda vacía y el método no entra en la correlación |
 
 No aparecen los métodos sin cuerpo (abstractos o de interfaces) ni `equals` y `hashCode`, que ninguna de las dos reglas informa. Por eso la cantidad de filas es menor que la medida `functions`.
+
+## `datos/pmd-<proyecto>-<version>/metodos.csv`
+
+Una fila por método o constructor según PMD 7.26.0. Lo genera `pmd_metodos.py exportar` a partir del reporte XML de `pmd_metodos.py correr`.
+
+| Columna | Descripción | Escala |
+| --- | --- | --- |
+| `archivo`, `linea` | Ruta del archivo y línea del nombre del método (la misma que usa SonarQube) | Nominal |
+| `metodo`, `tipo` | Nombre, y si es `method` o `constructor` | Nominal |
+| `ciclomatica_pmd` | Complejidad ciclomática según la regla `CyclomaticComplexity` | Absoluta |
+| `cognitiva_pmd` | Complejidad cognitiva según `CognitiveComplexity`. Con umbral 1 la regla calla cuando el valor es 0, así que un método sin informe de esta regla tiene 0 | Absoluta |
+| `ncss_pmd` | Tamaño del método en sentencias (NCSS: sin comentarios ni líneas en blanco), según `NcssCount`. Es la medida de tamaño del eje 2, porque PMD no informa la línea final del método | Absoluta |
+
+A diferencia de SonarQube, PMD informa también `equals`, `hashCode` y los métodos sin cuerpo.
+
+## `datos/extraccion-<proyecto>/eje2_metodos.csv`
+
+La tabla del eje 2: los métodos de `complejidad_metodo.csv` (SonarQube) cruzados con los de PMD por archivo y línea. Solo se arma si las dos fuentes son de la misma versión.
+
+| Columna | Origen |
+| --- | --- |
+| `archivo`, `linea`, `metodo` | SonarQube |
+| `ciclomatica_sonar`, `cognitiva_sonar`, `cognitiva_origen` | `complejidad_metodo.csv` (ver arriba) |
+| `ciclomatica_pmd`, `cognitiva_pmd`, `ncss_pmd` | `metodos.csv` de PMD |

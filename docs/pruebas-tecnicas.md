@@ -2,7 +2,7 @@
 
 Las cuatro pruebas confirman, antes de comprometernos con un diseño, que el laboratorio puede producir los datos que necesita cada eje. Cada una tiene su tarea en Jira. Cuando una prueba se corre, sus resultados se escriben acá, debajo de su sección, con la fecha.
 
-Estado al 2026-10-12: compilación del corpus (SCRUM-22) y prueba técnica 1 corridas; las pruebas 2, 3 y 4 todavía no.
+Estado al 2026-10-13: compilación del corpus (SCRUM-22) y pruebas técnicas 1 y 2 corridas; la 3 y la 4 todavía no.
 
 **Cuándo se corren los tests (decidido el 2026-10-12).** `analizar.py` compila de nuevo en cada análisis y, por defecto, corre todos los tests. Los tests solo hacen falta para medir cobertura, así que se usa `--sin-tests` en las pruebas 1, 2 y 3 y en los análisis `extraccion-*`. La prueba 4 y los análisis principales `corpus-*` se corren con tests y `--jacoco` (decisión D2 bis). `--sin-tests` pasa `-DskipTests=true`, que compila los tests pero no los ejecuta: SonarQube sigue analizando el código de test con sus clases compiladas, y lo único que falta es la cobertura. En commons-io los tests tardan unos 11 minutos.
 
@@ -96,7 +96,28 @@ python guiones/complejidad_por_metodo.py exportar jsoup
 
 **Vista preliminar de la correlación** (Spearman, sin controlar el tamaño, solo para dimensionar; el análisis de 5.2 lo hace el integrante 3). Con los 88 ceros falsos: 0,852. Sin ellos (2.000 métodos): 0,975. Solo métodos con ciclomática mayor que 1 (744): 0,906. El error de imputación bajaba la correlación de forma notable, así que el tratamiento de los no medidos importa para el resultado.
 
-**Pendiente.** Decidir cómo se obtiene el tamaño de cada método, que D5 necesita para la correlación controlada.
+**Tamaño del método y segunda implementación: PMD (2026-10-13).** Se eligió PMD 7.26.0 en lugar de medir el tamaño con un guion propio: además del tamaño da una implementación independiente de las dos complejidades. Corre en el contenedor de herramientas sobre el código fuente (jsoup tardó 573 s, lento; antes de la corrida de producción conviene probar `--aux-classpath` con las clases compiladas):
+
+```
+python guiones/pmd_metodos.py instalar
+python guiones/pmd_metodos.py correr jsoup 1.23.2
+python guiones/pmd_metodos.py exportar jsoup 1.23.2
+```
+
+| Control | Resultado |
+| --- | --- |
+| Métodos de SonarQube con par en PMD (por archivo y línea) | 2.088 de 2.088. PMD informa 155 más: `equals`, `hashCode` y métodos sin cuerpo |
+| Mensajes de PMD no leídos | 0 |
+| Cognitiva 0 en SonarQube (imputada por ciclomática 1) | 0 también en PMD en los 1.230 |
+| Cognitiva no medida por SonarQube | Mayor que 0 en PMD en los 88. `HtmlTreeBuilderState.java`: 6 en SonarQube, 790 en PMD; `inBodyStartTag`: 119 |
+| Cognitiva igual entre herramientas (métodos medidos por SonarQube) | 747 de 770 (97 %) |
+| Ciclomática igual entre herramientas | 1.898 de 2.088 (91 %); en 111 PMD da más y en 79 da menos |
+
+Tres conclusiones. La primera: el hallazgo de la cognitiva no medida queda confirmado por una implementación independiente; el problema es de SonarQube, no de la extracción. La segunda: la imputación de ceros era correcta. La tercera, que es otro hallazgo: dos implementaciones de la ciclomática de McCabe no coinciden en uno de cada once métodos. Para 2.4 y 6.2 hay que mirar qué construcciones cuenta distinto cada una (ejemplos: `readByteDataUnchecked` da 1 en SonarQube y 3 en PMD; `consumeCharacterReference`, 27 y 26).
+
+**Tamaño.** PMD informa en la línea del nombre del método (`beginline` igual a `endline`), así que tampoco da el tamaño en líneas. El tamaño del eje 2 es el NCSS de PMD (sentencias, sin comentarios ni líneas en blanco), disponible para los 2.088 métodos.
+
+**Hecho.** La tabla `datos/extraccion-jsoup/eje2_metodos.csv` tiene una fila por método con las dos complejidades de las dos herramientas y el tamaño. Con eso la prueba técnica 2 queda cerrada.
 
 **La consola de Windows.** En la consola clásica de Windows, hacer clic o seleccionar texto la pone en modo selección, y cualquier programa que quiera escribir en ella se bloquea hasta que se sale de ese modo (Enter, Esc o Ctrl+C con texto seleccionado, que copia en lugar de interrumpir). El análisis quedó así 15 minutos después de terminar. Si un comando parece colgado, conviene apretar Esc en su ventana antes de cortarlo.
 

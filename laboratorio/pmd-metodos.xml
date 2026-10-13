@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Conjunto de reglas de PMD para medir cada método (eje 2, segunda implementación).
+  No busca defectos: baja los umbrales al mínimo para que las reglas informen el
+  valor de todos los métodos, igual que el perfil de extracción de SonarQube.
+  Los umbrales por clase se suben al máximo para que no generen reportes de clase.
+  Lo usa guiones/pmd_metodos.py.
+-->
+<ruleset name="TP metricas por metodo"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+    <description>Complejidad ciclomática, complejidad cognitiva y tamaño (NCSS) de cada método.</description>
+
+    <rule ref="category/java/design.xml/CyclomaticComplexity">
+        <properties>
+            <property name="methodReportLevel" value="1"/>
+            <property name="classReportLevel" value="999999"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/design.xml/CognitiveComplexity">
+        <properties>
+            <property name="reportLevel" value="1"/>
+        </properties>
+    </rule>
+
+    <rule ref="category/java/design.xml/NcssCount">
+        <properties>
+            <property name="methodReportLevel" value="1"/>
+            <property name="classReportLevel" value="999999"/>
+        </properties>
+    </rule>
+</ruleset>
