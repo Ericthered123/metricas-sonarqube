@@ -42,13 +42,19 @@ cp laboratorio/.env.example laboratorio/.env        # Linux o macOS
 docker compose -f laboratorio/docker-compose.yml --env-file laboratorio/.env up -d
 ```
 
-**3. Preparar la instancia.** Espera a que arranque, reemplaza la contraseña de fábrica de `admin` por una aleatoria y genera un token. Las dos quedan en `laboratorio/.env`, que no se sube al repositorio:
+**3. Preparar la instancia.** Espera a que arranque, reemplaza la contraseña de fábrica de `admin` por una aleatoria, genera un token y pone "Sonar way comprehensive" como perfil predeterminado de Java (ver [docs/configuracion-analisis.md](docs/configuracion-analisis.md)). La contraseña y el token quedan en `laboratorio/.env`, que no se sube al repositorio:
 
 ```
 python guiones/preparar_sonarqube.py
 ```
 
 SonarQube queda en http://localhost:9000 (usuario `admin`, contraseña en `laboratorio/.env`).
+
+Para comprobar que tu instancia tiene la misma configuración que la del estudio, exportala y compará con lo versionado en `laboratorio/configuracion/` (`git diff` no tendría que mostrar cambios salvo la fecha de exportación):
+
+```
+python guiones/exportar_configuracion.py
+```
 
 **4. Descargar el corpus.** Trae los ocho commits de `corpus/corpus.csv` y verifica cada hash:
 
@@ -97,6 +103,6 @@ docker compose -f laboratorio/docker-compose.yml --env-file laboratorio/.env dow
 
 1. Todo número del artículo sale de un guion de este repositorio.
 2. Se analiza siempre un commit de `corpus/corpus.csv`, nunca un tag ni una rama.
-3. Un único perfil de calidad para todo el análisis principal.
+3. Un único perfil de calidad para todo el análisis principal ("Sonar way comprehensive", claves `corpus-*`). El contraste del eje 1 con "Sonar way core" va bajo `corpus-core-*`. `analizar.py` asigna el perfil en cada análisis.
 4. Las versiones de las herramientas se cambian solo en `VERSIONES.md` y en el mismo commit donde se usan.
 5. Los análisis de prueba van bajo claves `prueba-*`; el análisis definitivo, bajo `corpus-*`.

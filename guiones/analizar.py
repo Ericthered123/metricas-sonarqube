@@ -6,9 +6,12 @@ Cada análisis queda registrado en ``datos/registro_analisis.csv`` con fecha,
 duración, clave de proyecto y opciones usadas.
 
 Claves de proyecto en SonarQube (decisiones D1 y D2):
-  * ``corpus-<proyecto>``: análisis principal. Los dos releases de un proyecto
-    se analizan bajo la MISMA clave, primero el viejo y después el nuevo, para
-    que el código nuevo del Quality Gate sea la diferencia entre ambos.
+  * ``corpus-<proyecto>``: análisis principal, con el perfil "Sonar way
+    comprehensive". Los dos releases de un proyecto se analizan bajo la MISMA
+    clave, primero el viejo y después el nuevo, para que el código nuevo del
+    Quality Gate sea la diferencia entre ambos.
+  * ``corpus-core-<proyecto>``: el mismo análisis con el perfil "Sonar way
+    core" (``--perfil core``), como contraste para el eje 1 (SCRUM-26).
   * ``extraccion-<proyecto>``: análisis aparte con el perfil de extracción de
     complejidad por método (no contamina la deuda técnica del principal).
   * ``prueba-*``: pruebas técnicas; se pueden borrar sin perder nada.
@@ -38,6 +41,11 @@ Uso:
     python guiones/analizar.py jsoup 1.23.2 --clave prueba-pt1-jsoup
     python guiones/analizar.py jsoup 1.22.2 --fecha 2026-01-10
     python guiones/analizar.py commons-io 2.22.0 --jacoco
+    python guiones/analizar.py commons-io 2.22.0 --jacoco --perfil core
+
+Antes de cada análisis se crea el proyecto en SonarQube si no existe y se le
+asigna el perfil (comun.asignar_perfil), salvo en las claves extraccion-*, cuyo
+perfil administra complejidad_por_metodo.py.
 """
 
 from __future__ import annotations
@@ -50,17 +58,22 @@ from datetime import datetime
 from pathlib import Path
 
 from comun import (
+    PERFILES,
+    ClienteSonar,
     DIR_DATOS,
     DIR_TRABAJO,
     DIR_LOGS,
     OMITIR_PLUGINS_AJENOS,
     URL_SONAR_DESDE_CONTENEDOR,
     agregar_fila_csv,
+    asignar_perfil,
     aviso,
+    clave_corpus,
     buscar_version,
     config,
     correr_en_herramientas,
     info,
+    perfil_esperado,
     salir,
 )
 
@@ -86,13 +99,9 @@ REPORTE_JACOCO = "target/site/jacoco-tp/jacoco.xml"
 
 REGISTRO = DIR_DATOS / "registro_analisis.csv"
 COLUMNAS_REGISTRO = [
-    "fecha", "clave", "proyecto", "version", "commit", "fecha_analisis",
+    "fecha", "clave", "proyecto", "version", "commit", "perfil", "fecha_analisis",
     "tests", "jacoco", "resultado", "duracion_s", "log",
 ]
-
-
-def clave_por_defecto(proyecto: str) -> str:
-    return f"corpus-{proyecto}"
 
 
 def paquete_raiz(directorio: Path) -> str:
@@ -182,7 +191,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("proyecto")
     parser.add_argument("version")
-    parser.add_argument("--clave", help="clave del proyecto en SonarQube (por defecto corpus-<proyecto>)")
+    parser.add_argument("--clave", help="clave del proyecto en SonarQube (por defecto corpus-<proyecto> o corpus-core-<proyecto>)")
+    parser.add_argument("--perfil", choices=sorted(PERFILES), default="comprehensive",
+                        help="perfil de calidad: comprehensive (principal, por defecto) o core (contraste)")
     parser.add_argument(
         "--fecha",
         help="fecha del análisis (AAAA-MM-DD), para fecharlo en el pasado (prueba técnica 3). "
@@ -205,7 +216,15 @@ def main() -> None:
     if not token:
         salir("Falta SONAR_TOKEN en laboratorio/.env. Corré antes preparar_sonarqube.py.")
 
-    clave = args.clave or clave_por_defecto(version.proyecto)
+    perfil = PERFILES[args.perfil]
+    clave = args.clave or clave_corpus(version.proyecto, perfil)
+    if perfil_esperado(clave) is None:
+        perfil = "(administrado por complejidad_por_metodo.py)"
+    else:
+        if args.clave and perfil_esperado(clave) != perfil:
+            salir(f"La clave '{clave}' corresponde al perfil '{perfil_esperado(clave)}' y se pidió '{perfil}'")
+        asignar_perfil(ClienteSonar.desde_config(), clave, perfil)
+        info(f"'{clave}' usa el perfil '{perfil}'")
 
     propiedades_sonar = [
         f"-Dsonar.host.url={URL_SONAR_DESDE_CONTENEDOR}",
@@ -276,6 +295,7 @@ def main() -> None:
             "proyecto": version.proyecto,
             "version": version.version,
             "commit": version.commit,
+            "perfil": perfil,
             "fecha_analisis": args.fecha or "",
             "tests": "no" if args.sin_tests else "sí",
             "jacoco": "sí" if args.jacoco else "no",

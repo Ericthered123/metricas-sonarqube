@@ -6,7 +6,11 @@ Pasos, todos idempotentes:
      la cambia por una aleatoria y la guarda en ``laboratorio/.env``.
   3. Si no hay token en ``laboratorio/.env``, genera uno de usuario para admin
      y lo guarda ahí. Los demás guiones lo usan para la API y el escáner.
-  4. Muestra la versión instalada y los dos parámetros que el eje 1 necesita
+  4. Pone "Sonar way comprehensive" como perfil predeterminado de Java (en una
+     instalación nueva de la 26.10 es "Sonar way core"; ver comun.PERFIL_PRINCIPAL).
+     analizar.py igual asigna el perfil a cada proyecto: esto evita sorpresas
+     si alguien analiza a mano.
+  5. Muestra la versión instalada y los dos parámetros que el eje 1 necesita
      verificar (costo de desarrollo por línea y grilla de la calificación).
 
 ``laboratorio/.env`` no se versiona: las credenciales son de tu instancia local.
@@ -23,6 +27,7 @@ from datetime import datetime
 
 from comun import (
     ARCHIVO_ENV,
+    PERFIL_PRINCIPAL,
     ClienteSonar,
     ErrorSonar,
     config,
@@ -114,6 +119,8 @@ def main() -> None:
     token = asegurar_token(url, clave)
 
     cliente = ClienteSonar(url, token=token)
+    cliente.post("/api/qualityprofiles/set_default", language="java", qualityProfile=PERFIL_PRINCIPAL)
+    info(f"Perfil predeterminado de Java: '{PERFIL_PRINCIPAL}'")
     ajustes = cliente.get(
         "/api/settings/values",
         keys="sonar.technicalDebt.developmentCost,sonar.technicalDebt.ratingGrid",

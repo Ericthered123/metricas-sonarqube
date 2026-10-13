@@ -254,7 +254,7 @@ class ClienteSonar:
             salir("Falta SONAR_TOKEN en laboratorio/.env. Corré antes preparar_sonarqube.py.")
         return cls(cfg["SONAR_URL"], token=token)
 
-    def _pedir(self, metodo: str, ruta: str, params: dict[str, Any] | None) -> Any:
+    def _pedir(self, metodo: str, ruta: str, params: dict[str, Any] | None, crudo: bool = False) -> Any:
         params = {k: v for k, v in (params or {}).items() if v is not None}
         codificados = urllib.parse.urlencode(params, doseq=True)
         url = f"{self.url}{ruta}"
@@ -271,10 +271,16 @@ class ClienteSonar:
                 cuerpo = respuesta.read().decode("utf-8")
         except urllib.error.HTTPError as error:
             raise ErrorSonar(error.code, error.read().decode("utf-8", "replace"), url) from None
+        if crudo:
+            return cuerpo
         return json.loads(cuerpo) if cuerpo.strip() else {}
 
     def get(self, ruta: str, **params: Any) -> Any:
         return self._pedir("GET", ruta, params)
+
+    def get_texto(self, ruta: str, **params: Any) -> str:
+        """GET que devuelve el cuerpo sin interpretar (para respuestas que no son JSON, como el XML de un perfil)."""
+        return self._pedir("GET", ruta, params, crudo=True)
 
     def post(self, ruta: str, **params: Any) -> Any:
         return self._pedir("POST", ruta, params)
@@ -370,6 +376,54 @@ def correr_en_herramientas(
                 print("    " + linea.rstrip(), flush=True)
         codigo = proceso.wait()
     return codigo, time.monotonic() - inicio
+
+
+# ---------------------------------------------------------------------------
+# Perfiles de calidad (SCRUM-26)
+# ---------------------------------------------------------------------------
+
+# Desde la 26.10 hay tres perfiles predefinidos "Sonar way" por lenguaje, y en
+# una instalación nueva el predeterminado es "core" (274 reglas de Java, solo
+# 45 de mantenibilidad). "comprehensive" (618 reglas) es lo que antes se
+# llamaba "Sonar way" y lo que usan los estudios previos. Decisión del
+# 2026-10-13: el análisis principal usa comprehensive y core se corre como
+# contraste para el eje 1, bajo otra clave. Detalle en docs/configuracion-analisis.md.
+PERFIL_PRINCIPAL = "Sonar way comprehensive"
+PERFIL_CONTRASTE = "Sonar way core"
+PERFILES = {"comprehensive": PERFIL_PRINCIPAL, "core": PERFIL_CONTRASTE}
+
+
+def clave_corpus(proyecto: str, perfil: str = PERFIL_PRINCIPAL) -> str:
+    """Clave del análisis definitivo de un proyecto: corpus-<p> (principal) o corpus-core-<p> (contraste)."""
+    return f"corpus-{proyecto}" if perfil == PERFIL_PRINCIPAL else f"corpus-core-{proyecto}"
+
+
+def perfil_esperado(clave: str) -> str | None:
+    """Perfil que debe tener una clave de SonarQube, según su prefijo.
+
+    Las claves extraccion-* usan el perfil de extracción de complejidad, que
+    administra complejidad_por_metodo.py: devuelve None para no tocarlas.
+    """
+    if clave.startswith("extraccion-"):
+        return None
+    if clave.startswith(("corpus-core-", "prueba-core-")):
+        return PERFIL_CONTRASTE
+    return PERFIL_PRINCIPAL
+
+
+def asignar_perfil(cliente: "ClienteSonar", clave: str, perfil: str, lenguaje: str = "java") -> None:
+    """Crea el proyecto si no existe y le asigna el perfil de calidad.
+
+    Se asigna explícitamente en cada análisis para no depender del perfil
+    predeterminado de la instancia.
+    """
+    try:
+        cliente.post("/api/projects/create", project=clave, name=clave)
+        info(f"Proyecto '{clave}' creado")
+    except ErrorSonar as error:
+        if error.codigo != 400:  # 400 = ya existe
+            raise
+    cliente.post("/api/qualityprofiles/add_project", language=lenguaje, qualityProfile=perfil, project=clave)
 
 
 # Plugins de verificación que algunos proyectos corren en ``verify`` y que no

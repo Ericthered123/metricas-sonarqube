@@ -1,0 +1,26 @@
+{
+  "nombre": "Sonar way",
+  "predefinido": true,
+  "condiciones": [
+    {
+      "metrica": "new_violations",
+      "comparador": "GT",
+      "umbral": "0"
+    },
+    {
+      "metrica": "new_coverage",
+      "comparador": "LT",
+      "umbral": "80"
+    },
+    {
+      "metrica": "new_duplicated_lines_density",
+      "comparador": "GT",
+      "umbral": "3"
+    },
+    {
+      "metrica": "new_security_hotspots_reviewed",
+      "comparador": "LT",
+      "umbral": "100"
+    }
+  ]
+}

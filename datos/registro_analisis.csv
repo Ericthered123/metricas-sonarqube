@@ -1,12 +1,13 @@
-fecha,clave,proyecto,version,commit,fecha_analisis,tests,jacoco,resultado,duracion_s,log
-2026-10-12T20:30:08,prueba-pt1-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,,no,no,ok,174,analisis-prueba-pt1-jsoup-1.23.2-20261012-203008.log
-2026-10-12T23:57:51,extraccion-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,,no,no,ok,1116,analisis-extraccion-jsoup-1.23.2-20261012-235751.log
-2026-10-13T11:28:49,prueba-pt3-jsoup,jsoup,1.22.2,ac28afe6e5bf96d39fd17c3e0a797a7585e1958c,,no,no,ok,151,analisis-prueba-pt3-jsoup-1.22.2-20261013-112849.log
-2026-10-13T11:32:27,prueba-pt3-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,,no,no,ok (gate rechazado),147,analisis-prueba-pt3-jsoup-1.23.2-20261013-113227.log
-2026-10-13T11:52:30,prueba-pt4-jsoup-v1,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,,sí,sí,ok,207,analisis-prueba-pt4-jsoup-v1-1.23.2-20261013-115230.log
-2026-10-13T12:09:08,prueba-pt4-jsoup,jsoup,1.22.2,ac28afe6e5bf96d39fd17c3e0a797a7585e1958c,,sí,sí,falla (código 1),183,analisis-prueba-pt4-jsoup-1.22.2-20261013-120908.log
-2026-10-13T12:13:36,prueba-pt4-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,,sí,sí,falla (código 1),119,analisis-prueba-pt4-jsoup-1.23.2-20261013-121336.log
-2026-10-13T12:24:27,prueba-pt4-jsoup,jsoup,1.22.2,ac28afe6e5bf96d39fd17c3e0a797a7585e1958c,,sí,sí,ok,296,analisis-prueba-pt4-jsoup-1.22.2-20261013-122427.log
-2026-10-13T12:31:33,prueba-pt4-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,,sí,sí,ok (gate rechazado),215,analisis-prueba-pt4-jsoup-1.23.2-20261013-123133.log
-2026-10-13T12:40:27,prueba-pt4-jsoup-raices,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,,sí,sí,ok,229,analisis-prueba-pt4-jsoup-raices-1.23.2-20261013-124027.log
-2026-10-13T12:48:56,prueba-pt4-commons-io,commons-io,2.22.0,c14acc16f73e44a75b2062b17aacb26c4feda746,,sí,sí,ok,1151,analisis-prueba-pt4-commons-io-2.22.0-20261013-124856.log
+fecha,clave,proyecto,version,commit,perfil,fecha_analisis,tests,jacoco,resultado,duracion_s,log
+2026-10-12T20:30:08,prueba-pt1-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,Sonar way core,,no,no,ok,174,analisis-prueba-pt1-jsoup-1.23.2-20261012-203008.log
+2026-10-12T23:57:51,extraccion-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,TP extraccion complejidad,,no,no,ok,1116,analisis-extraccion-jsoup-1.23.2-20261012-235751.log
+2026-10-13T11:28:49,prueba-pt3-jsoup,jsoup,1.22.2,ac28afe6e5bf96d39fd17c3e0a797a7585e1958c,Sonar way core,,no,no,ok,151,analisis-prueba-pt3-jsoup-1.22.2-20261013-112849.log
+2026-10-13T11:32:27,prueba-pt3-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,Sonar way core,,no,no,ok (gate rechazado),147,analisis-prueba-pt3-jsoup-1.23.2-20261013-113227.log
+2026-10-13T11:52:30,prueba-pt4-jsoup-v1,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,Sonar way core,,sí,sí,ok,207,analisis-prueba-pt4-jsoup-v1-1.23.2-20261013-115230.log
+2026-10-13T12:09:08,prueba-pt4-jsoup,jsoup,1.22.2,ac28afe6e5bf96d39fd17c3e0a797a7585e1958c,Sonar way core,,sí,sí,falla (código 1),183,analisis-prueba-pt4-jsoup-1.22.2-20261013-120908.log
+2026-10-13T12:13:36,prueba-pt4-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,Sonar way core,,sí,sí,falla (código 1),119,analisis-prueba-pt4-jsoup-1.23.2-20261013-121336.log
+2026-10-13T12:24:27,prueba-pt4-jsoup,jsoup,1.22.2,ac28afe6e5bf96d39fd17c3e0a797a7585e1958c,Sonar way core,,sí,sí,ok,296,analisis-prueba-pt4-jsoup-1.22.2-20261013-122427.log
+2026-10-13T12:31:33,prueba-pt4-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,Sonar way core,,sí,sí,ok (gate rechazado),215,analisis-prueba-pt4-jsoup-1.23.2-20261013-123133.log
+2026-10-13T12:40:27,prueba-pt4-jsoup-raices,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,Sonar way core,,sí,sí,ok,229,analisis-prueba-pt4-jsoup-raices-1.23.2-20261013-124027.log
+2026-10-13T12:48:56,prueba-pt4-commons-io,commons-io,2.22.0,c14acc16f73e44a75b2062b17aacb26c4feda746,Sonar way core,,sí,sí,ok,1151,analisis-prueba-pt4-commons-io-2.22.0-20261013-124856.log
+2026-10-13T13:52:11,prueba-comp-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,Sonar way comprehensive,,no,no,ok,170,analisis-prueba-comp-jsoup-1.23.2-20261013-135211.log

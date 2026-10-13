@@ -1,0 +1,69 @@
+{
+  "fecha_exportacion": "2026-10-13T14:19:07",
+  "version_sonarqube": "26.10.0.133078",
+  "perfiles_java": {
+    "comprehensive": {
+      "nombre": "Sonar way comprehensive",
+      "predefinido": true,
+      "reglas_activas": 618,
+      "reglas_actualizadas": "2026-10-13T14:25:41+0000"
+    },
+    "core": {
+      "nombre": "Sonar way core",
+      "predefinido": true,
+      "reglas_activas": 274,
+      "reglas_actualizadas": "2026-10-13T14:25:43+0000"
+    }
+  },
+  "perfil_java_predeterminado": "Sonar way comprehensive",
+  "codigo_nuevo": {
+    "type": "PREVIOUS_VERSION"
+  },
+  "parametros": {
+    "sonar.technicalDebt.developmentCost": {
+      "vigente": "30",
+      "por_defecto": "30",
+      "modificado": false
+    },
+    "sonar.technicalDebt.ratingGrid": {
+      "vigente": "0.05,0.1,0.2,0.5",
+      "por_defecto": "0.05,0.1,0.2,0.5",
+      "modificado": false
+    },
+    "sonar.multi-quality-mode.enabled": {
+      "vigente": "true",
+      "por_defecto": "",
+      "modificado": true
+    },
+    "sonar.qualitygate.ignoreSmallChanges": {
+      "vigente": "true",
+      "por_defecto": "true",
+      "modificado": false
+    },
+    "sonar.exclusions": {
+      "vigente": "",
+      "por_defecto": "",
+      "modificado": false
+    },
+    "sonar.test.exclusions": {
+      "vigente": "",
+      "por_defecto": "",
+      "modificado": false
+    },
+    "sonar.coverage.exclusions": {
+      "vigente": "",
+      "por_defecto": "",
+      "modificado": false
+    },
+    "sonar.cpd.exclusions": {
+      "vigente": "",
+      "por_defecto": "",
+      "modificado": false
+    },
+    "sonar.global.exclusions": {
+      "vigente": "",
+      "por_defecto": "",
+      "modificado": false
+    }
+  }
+}

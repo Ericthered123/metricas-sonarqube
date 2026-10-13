@@ -20,6 +20,8 @@ Una fila por versión del corpus. Lo genera `compilar_corpus.py`.
 
 Una fila por cada análisis lanzado con `analizar.py`: fecha, clave de SonarQube, versión, commit, opciones (tests, JaCoCo, fecha forzada), resultado y log. Sirve para reconstruir en qué orden se hizo cada análisis, que importa para el código nuevo del eje 3.
 
+`perfil` es el perfil de calidad con que se analizó (ver `docs/configuracion-analisis.md`). La columna se agregó el 2026-10-13; en las filas anteriores se completó a mano: "Sonar way core", el predeterminado de la instalación nueva, salvo `extraccion-jsoup`, que usa "TP extraccion complejidad". `resultado` puede ser `ok`, `ok (gate rechazado)`, `falla (código N)`, y con `--jacoco` lleva además `, cobertura dudosa` si el reporte tiene una sola sesión.
+
 ## `datos/<clave>/medidas_archivo.csv`
 
 Una fila por archivo de código. Lo genera `exportar_medidas.py`.
