@@ -27,3 +27,7 @@ fecha,clave,proyecto,version,commit,perfil,fecha_analisis,tests,jacoco,resultado
 2026-10-13T17:22:52,corpus-commons-io,commons-io,2.22.0,c14acc16f73e44a75b2062b17aacb26c4feda746,Sonar way comprehensive,,sí,sí,ok (gate rechazado),1225,analisis-corpus-commons-io-2.22.0-20261013-172252.log
 2026-10-13T17:43:18,corpus-core-commons-io,commons-io,2.21.0,54073d3b5fdd2985b98a48040ede95eb59c7ee53,Sonar way core,,sí,sí,ok,1201,analisis-corpus-core-commons-io-2.21.0-20261013-174318.log
 2026-10-13T18:03:22,corpus-core-commons-io,commons-io,2.22.0,c14acc16f73e44a75b2062b17aacb26c4feda746,Sonar way core,,sí,sí,ok (gate rechazado),1231,analisis-corpus-core-commons-io-2.22.0-20261013-180322.log
+2026-10-13T19:36:07,extraccion-jsoup,jsoup,1.23.2,fbc7775c462f5b023d8db54c9a73d7ec17d53300,(administrado por complejidad_por_metodo.py),,no,no,ok,174,analisis-extraccion-jsoup-1.23.2-20261013-193607.log
+2026-10-13T20:01:23,extraccion-jfreechart,jfreechart,1.5.6,703427c2acf05f59a3660e03d1207b7ddc057412,(administrado por complejidad_por_metodo.py),,no,no,ok,644,analisis-extraccion-jfreechart-1.5.6-20261013-200123.log
+2026-10-13T20:51:30,extraccion-commons-collections,commons-collections,4.6.0,4107624de41aeed37985d2a069fad41992fd71a2,(administrado por complejidad_por_metodo.py),,no,no,ok,465,analisis-extraccion-commons-collections-4.6.0-20261013-205130.log
+2026-10-13T21:20:46,extraccion-commons-io,commons-io,2.22.0,c14acc16f73e44a75b2062b17aacb26c4feda746,(administrado por complejidad_por_metodo.py),,no,no,ok,338,analisis-extraccion-commons-io-2.22.0-20261013-212046.log

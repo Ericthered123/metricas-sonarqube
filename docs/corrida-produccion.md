@@ -49,3 +49,21 @@ Esta página registra la corrida y una primera lectura. El análisis de cada eje
 ## Comparación con el diff real
 
 `diff_releases.py --comparar` coincide archivo por archivo en jsoup, jfreechart y commons-collections. En commons-io hay un archivo modificado sin `new_lines`: `BrokenInputStream.java`, con un cambio que git cuenta como una línea agregada y SonarQube no. Es consistente con lo que mostró la PT3: SonarQube ignora los cambios que son solo de espacios.
+
+## Extracción del eje 2 (SCRUM-29)
+
+Corrida el 2026-10-13 de 19:36 a 21:40 con `python guiones/extraer_eje2.py`, sobre el release nuevo de cada proyecto. Para cada uno: análisis aparte `extraccion-<proyecto>` con el perfil de extracción, exportación por método y PMD 7.26.0 con el classpath del proyecto. Tablas del eje 2 en `datos/extraccion-<proyecto>/eje2_metodos.csv`.
+
+| Proyecto | Métodos (SonarQube) | Con par en PMD | Cognitiva no medida por SonarQube | Ciclomática igual en las dos herramientas | Cognitiva igual (medidos por SonarQube) | Tiempo de PMD |
+| --- | --- | --- | --- | --- | --- | --- |
+| jsoup 1.23.2 | 2.088 | 2.088 | 88 | 1.898 (90,9 %) | 747 de 770 (97,0 %) | 602 s |
+| jfreechart 1.5.6 | 7.893 | 7.893 | 2 | 7.451 (94,4 %) | 2.257 de 2.337 (96,6 %) | 2.344 s |
+| commons-collections 4.6.0 | 4.722 | 4.720 | 28 | 4.050 de 4.720 (85,8 %) | 1.264 de 1.293 (97,8 %) | 1.277 s |
+| commons-io 2.22.0 | 3.083 | 3.081 | 5 | 2.715 de 3.081 (88,1 %) | 756 de 767 (98,6 %) | 773 s |
+
+* En total, la tabla del eje 2 tiene 17.782 métodos con par en las dos herramientas.
+* **Reproducibilidad.** jsoup se volvió a extraer desde cero (base de SonarQube nueva y PMD con classpath) y los tres CSV quedaron idénticos a los de la prueba técnica 2.
+* **La cognitiva no medida se concentra en jsoup** (88 métodos, casi todos en la máquina de estados del parser). En los otros tres proyectos son 35 en total. PMD les da cognitiva mayor que 0 a todos.
+* **Las dos implementaciones coinciden más en la cognitiva que en la ciclomática** en los cuatro proyectos (entre 96,6 % y 98,6 % contra entre 85,8 % y 94,4 %).
+* **El código medido puede silenciar al instrumento.** Los 4 métodos de SonarQube sin par en PMD (2 en commons-collections y 2 en commons-io) tienen un comentario `// NOPMD` en la línea de la declaración: los propios desarrolladores le indican a PMD que no informe nada ahí. Del mismo modo, commons-io tiene 5 comentarios `// NOSONAR`, todos en declaraciones de métodos (dos constructores y tres sobrecargas de `IOUtils.write`), que no aparecen en la extracción de SonarQube (y tampoco cuentan para la deuda ni para el gate). Son pocos casos, pero el mecanismo es material para 6.2: el objeto medido puede apagar la medición.
+* PMD sigue siendo lento (jfreechart, 39 minutos) aunque corre con un hilo por núcleo: el cuello de botella no es el procesador. No se optimizó porque no afecta los resultados.
