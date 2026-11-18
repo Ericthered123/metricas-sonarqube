@@ -85,4 +85,4 @@ Los issues no se agrupan: si una regla aparece 40 veces, son 40 decisiones. Se i
 
 ## 8. Enmiendas
 
-(Ninguna al 2026-11-18.)
+1. **2026-11-18, antes de que empiece la clasificación.** Se agrega `docs/guia-clasificacion-5-4.md`: qué detecta cada una de las 13 reglas presentes y qué verificar en el código para responder las dos preguntas de la sección 3, sin indicar categorías. La pidió Eric y la reciben los dos clasificadores por igual, así que no cambia el criterio ni la independencia. Las reglas presentes se conocían porque `planilla_5_4.py` ya se había corrido; la guía se escribió sin mirar el código señalado por los issues.
