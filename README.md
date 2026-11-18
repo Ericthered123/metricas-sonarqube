@@ -116,6 +116,30 @@ python guiones/correr_corpus.py
 python guiones/extraer_eje2.py
 ```
 
+**9. Proyecto propio (SCRUM-30, sección 5.4).** El proyecto propio está en `corpus/proyecto-propio.csv`, separado del corpus para que los pasos 7 y 8 no lo incluyan. Se analiza con el perfil principal bajo la clave `propio-poo2025`, sin tests (el único test necesita una base de datos), y se arma la planilla de clasificación según `docs/protocolo-5-4.md`:
+
+```
+python guiones/clonar_corpus.py --propio
+python guiones/analizar.py poo2025 2026-03-13 --sin-tests
+python guiones/exportar_medidas.py propio-poo2025
+python guiones/planilla_5_4.py
+```
+
+Cuando los dos clasificadores completan sus copias (`clasificacion-eric.csv` y `clasificacion-brenda.csv` en `datos/propio-poo2025/`), `python guiones/precision_5_4.py` calcula el kappa, lista los desacuerdos y, con `clasificacion-consenso.csv`, la precisión final.
+
+**10. Análisis de los ejes (2026-11-18).** Leen solo `datos/` y escriben en `resultados/`; no necesitan SonarQube:
+
+```
+python guiones/eje1_calificacion.py      # 5.1, reproduce las cifras de la muestra de avances
+python guiones/eje2_correlacion.py       # 5.2
+python guiones/eje3_quality_gate.py      # 5.3
+python guiones/manifiesto_datos.py       # datos/MANIFIESTO.md, huellas de todos los CSV
+pip install -r guiones/figuras/requirements-figuras.txt
+python guiones/figuras/figura_eje2_dispersion.py
+```
+
+Lo que salió de cada eje, listo para redactar, está en `docs/resultados-eje2.md` y `docs/resultados-eje3.md`.
+
 ## Apagar y limpiar
 
 ```

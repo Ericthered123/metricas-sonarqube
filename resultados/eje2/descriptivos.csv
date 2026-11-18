@@ -1,0 +1,16 @@
+proyecto,metrica,n,minimo,q1,mediana,q3,media,p90,maximo,proporcion_ceros
+commons-io,ciclomatica_sonar,3076,1.0,1.0,1.0,1.0,1.526,2.0,31.0,0.0
+commons-io,cognitiva_sonar,3076,0.0,0.0,0.0,0.0,0.747,2.0,51.0,0.7507
+commons-io,ncss_pmd,3076,1.0,2.0,2.0,3.0,3.398,6.0,55.0,0.0
+commons-collections,ciclomatica_sonar,4692,1.0,1.0,1.0,2.0,1.588,3.0,29.0,0.0
+commons-collections,cognitiva_sonar,4692,0.0,0.0,0.0,1.0,0.822,2.0,50.0,0.7244
+commons-collections,ncss_pmd,4692,1.0,2.0,2.0,4.0,3.713,7.0,124.0,0.0
+jsoup,ciclomatica_sonar,2000,1.0,1.0,1.0,2.0,2.072,4.0,35.0,0.0
+jsoup,cognitiva_sonar,2000,0.0,0.0,0.0,1.0,1.437,4.0,47.0,0.615
+jsoup,ncss_pmd,2000,1.0,2.0,3.0,5.0,4.855,10.0,74.0,0.0
+jfreechart,ciclomatica_sonar,7891,1.0,1.0,1.0,2.0,2.09,4.0,58.0,0.0
+jfreechart,cognitiva_sonar,7891,0.0,0.0,0.0,1.0,1.75,4.0,177.0,0.7038
+jfreechart,ncss_pmd,7891,1.0,2.0,3.0,6.0,6.452,13.0,253.0,0.0
+corpus,ciclomatica_sonar,17659,1.0,1.0,1.0,2.0,1.856,3.0,58.0,0.0
+corpus,cognitiva_sonar,17659,0.0,0.0,0.0,1.0,1.293,3.0,177.0,0.7074
+corpus,ncss_pmd,17659,1.0,2.0,2.0,5.0,5.011,10.0,253.0,0.0

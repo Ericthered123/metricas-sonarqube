@@ -8,6 +8,7 @@ no hace nada, así que se puede correr las veces que haga falta.
 Uso:
     python guiones/clonar_corpus.py                  # todo el corpus
     python guiones/clonar_corpus.py --proyecto jsoup # un proyecto
+    python guiones/clonar_corpus.py --propio         # el proyecto propio (sección 5.4)
 """
 
 from __future__ import annotations
@@ -16,7 +17,7 @@ import argparse
 import subprocess
 from pathlib import Path
 
-from comun import VersionCorpus, filtrar_corpus, info, salir, aviso
+from comun import VersionCorpus, filtrar_corpus, info, leer_proyecto_propio, salir, aviso
 
 
 def git(*argumentos: str, cwd: Path) -> str:
@@ -40,7 +41,9 @@ def commit_actual(directorio: Path) -> str | None:
 
 
 def clonar(version: VersionCorpus) -> None:
-    destino = version.directorio
+    # Se clona en la raíz del repositorio; el módulo a analizar puede estar en una
+    # subcarpeta (proyecto propio).
+    destino = version.directorio_repo
     actual = commit_actual(destino)
     if actual == version.commit:
         info(f"{version.proyecto} {version.version}: ya está en {version.commit[:12]}, se omite")
@@ -82,11 +85,18 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--proyecto", help="clonar solo este proyecto")
     parser.add_argument("--version", help="clonar solo esta versión")
+    parser.add_argument("--propio", action="store_true",
+                        help="clonar el proyecto propio (corpus/proyecto-propio.csv) en lugar del corpus")
     args = parser.parse_args()
 
-    versiones = filtrar_corpus(args.proyecto, args.version)
-    if not versiones:
-        salir("El filtro no coincide con ninguna fila de corpus/corpus.csv")
+    if args.propio:
+        versiones = leer_proyecto_propio()
+        if not versiones:
+            salir("No hay filas en corpus/proyecto-propio.csv")
+    else:
+        versiones = filtrar_corpus(args.proyecto, args.version)
+        if not versiones:
+            salir("El filtro no coincide con ninguna fila de corpus/corpus.csv")
     for version in versiones:
         try:
             clonar(version)

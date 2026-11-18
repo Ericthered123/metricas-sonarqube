@@ -1,0 +1,9 @@
+proyecto,perfil,codigo_nuevo_desde,new_lines,new_lines_to_cover,issues_nuevos,issues_nuevos_en_test,new_coverage,new_coverage_estado,new_duplicated_lines_density,new_duplicated_lines_density_estado,new_violations,new_violations_estado,gate_real,gate_sin_cobertura,gate_sin_issues_de_test,gate_sin_ambos
+commons-io,comprehensive,2.21.0,7645,362,57,34,92.5,ok,0.20929,ok,57,falla,rechaza,rechaza,rechaza,rechaza
+commons-io,core,2.21.0,7645,362,1,1,92.5,ok,0.20929,ok,1,falla,rechaza,rechaza,aprueba,aprueba
+commons-collections,comprehensive,4.5.0,17668,800,189,174,85.5,ok,6.08445,falla,189,falla,rechaza,rechaza,rechaza,rechaza
+commons-collections,core,4.5.0,17668,800,4,3,85.5,ok,6.08445,falla,4,falla,rechaza,rechaza,rechaza,rechaza
+jsoup,comprehensive,1.22.2,5325,1201,79,21,91.7,ok,0.0,ok,79,falla,rechaza,rechaza,rechaza,rechaza
+jsoup,core,1.22.2,5325,1201,3,0,91.7,ok,0.0,ok,3,falla,rechaza,rechaza,rechaza,rechaza
+jfreechart,comprehensive,1.5.5,5460,208,1,0,30.2,falla,1.57509,ok,1,falla,rechaza,rechaza,rechaza,rechaza
+jfreechart,core,1.5.5,5460,208,1,0,30.2,falla,1.57509,ok,1,falla,rechaza,rechaza,rechaza,rechaza

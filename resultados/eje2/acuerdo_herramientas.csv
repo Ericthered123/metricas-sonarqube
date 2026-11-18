@@ -1,0 +1,11 @@
+proyecto,metrica,n,iguales,proporcion_iguales,pmd_mayor,pmd_menor,rho_sonar_pmd
+commons-io,ciclomatica,3081,2715,0.8812,314,52,0.8716
+commons-io,cognitiva,3076,3064,0.9961,11,1,0.9993
+commons-collections,ciclomatica,4720,4050,0.8581,596,74,0.8862
+commons-collections,cognitiva,4692,4661,0.9934,24,7,0.9988
+jsoup,ciclomatica,2088,1898,0.909,111,79,0.9273
+jsoup,cognitiva,2000,1977,0.9885,13,10,0.9997
+jfreechart,ciclomatica,7893,7451,0.944,392,50,0.9836
+jfreechart,cognitiva,7891,7811,0.9899,62,18,0.9999
+corpus,ciclomatica,17782,16114,0.9062,1413,255,0.935
+corpus,cognitiva,17659,17513,0.9917,110,36,0.9996

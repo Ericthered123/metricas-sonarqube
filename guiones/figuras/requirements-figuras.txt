@@ -1,0 +1,2 @@
+# Dependencias de los guiones de figuras (el resto de guiones/ no tiene dependencias).
+matplotlib>=3.8

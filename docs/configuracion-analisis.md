@@ -88,3 +88,7 @@ python guiones/exportar_configuracion.py --verificar corpus-jsoup corpus-core-js
 ```
 
 Exporta la configuración y comprueba que cada clave usa el perfil que le corresponde y el gate "Sonar way". Termina con error si alguna no.
+
+## Advertencia de codificación en `corpus-jsoup` (revisada el 2026-11-18, SCRUM-31)
+
+El análisis de jsoup 1.23.2 (`trabajo/logs/analisis-corpus-jsoup-1.23.2-20261013-150743.log`, líneas 382 y 383) avisa de un carácter inválido para UTF-8 en dos archivos de **test**: `src/test/java/org/jsoup/parser/HtmlParserTest.java` (línea 1406) y `src/test/java/org/jsoup/parser/TokeniserStateTest.java` (línea 279). Son tests del parser que usan bytes inválidos a propósito. No afecta a ningún archivo del código principal, así que no cambia los datos de los ejes 1 y 2 ni la cobertura. Como mucho, puede afectar la detección de issues en esas dos líneas de test, que entran en `new_violations` (eje 3). Se deja así: forzar otra codificación sería tocar la configuración por defecto (D7).

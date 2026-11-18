@@ -1,0 +1,21 @@
+proyecto,nivel,subconjunto,n,rho,rho_ic_inf,rho_ic_sup,rho_ciclomatica_tamano,rho_cognitiva_tamano,rho_parcial_tamano,parcial_ic_inf,parcial_ic_sup
+commons-io,metodo,medidos,3076,0.9305,0.9255,0.9352,0.6028,0.6683,0.889,0.8811,0.8964
+commons-io,metodo,ciclomatica>1,673,0.9224,0.9099,0.9332,0.7134,0.772,0.8343,0.809,0.8566
+commons-io,metodo,no medidos como 0,3081,0.9257,0.9203,0.9307,0.6052,0.6654,0.88,0.8716,0.888
+commons-io,archivo,suma de medidos,254,0.739,0.6756,0.7916,0.9772,0.7368,0.1325,0.0056,0.2552
+commons-collections,metodo,medidos,4692,0.9781,0.9768,0.9794,0.7494,0.7556,0.9497,0.9467,0.9525
+commons-collections,metodo,ciclomatica>1,1257,0.9384,0.9312,0.9448,0.7296,0.7548,0.8642,0.849,0.878
+commons-collections,metodo,no medidos como 0,4720,0.965,0.9629,0.9669,0.748,0.75,0.9202,0.9156,0.9246
+commons-collections,archivo,suma de medidos,315,0.752,0.698,0.7976,0.983,0.7589,0.0499,-0.0645,0.1629
+jsoup,metodo,medidos,2000,0.9748,0.9725,0.977,0.7417,0.7636,0.9432,0.938,0.948
+jsoup,metodo,ciclomatica>1,744,0.9056,0.8914,0.9181,0.6937,0.7553,0.8086,0.7813,0.8328
+jsoup,metodo,no medidos como 0,2088,0.8519,0.8394,0.8636,0.7739,0.6598,0.7172,0.695,0.738
+jsoup,archivo,suma de medidos,85,0.929,0.8913,0.954,0.9899,0.9235,0.2726,0.0553,0.4652
+jfreechart,metodo,medidos,7891,0.9912,0.9908,0.9916,0.7716,0.7796,0.9781,0.9771,0.9791
+jfreechart,metodo,ciclomatica>1,2310,0.9235,0.9171,0.9295,0.7952,0.814,0.7843,0.7675,0.7999
+jfreechart,metodo,no medidos como 0,7893,0.9906,0.9902,0.991,0.7718,0.7792,0.9766,0.9756,0.9777
+jfreechart,archivo,suma de medidos,535,0.8937,0.8746,0.91,0.9757,0.8858,0.2894,0.2073,0.3675
+corpus,metodo,medidos,17659,0.9778,0.9771,0.9784,0.7331,0.7482,0.9513,0.9498,0.9527
+corpus,metodo,ciclomatica>1,4984,0.9231,0.9188,0.9272,0.7547,0.7942,0.812,0.8021,0.8216
+corpus,metodo,no medidos como 0,17782,0.9576,0.9563,0.9588,0.7376,0.7354,0.9073,0.9046,0.91
+corpus,archivo,suma de medidos,1189,0.8398,0.8217,0.8563,0.9752,0.8485,0.1051,0.0468,0.1627

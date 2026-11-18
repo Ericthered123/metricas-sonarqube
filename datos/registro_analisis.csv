@@ -31,3 +31,4 @@ fecha,clave,proyecto,version,commit,perfil,fecha_analisis,tests,jacoco,resultado
 2026-10-13T20:01:23,extraccion-jfreechart,jfreechart,1.5.6,703427c2acf05f59a3660e03d1207b7ddc057412,(administrado por complejidad_por_metodo.py),,no,no,ok,644,analisis-extraccion-jfreechart-1.5.6-20261013-200123.log
 2026-10-13T20:51:30,extraccion-commons-collections,commons-collections,4.6.0,4107624de41aeed37985d2a069fad41992fd71a2,(administrado por complejidad_por_metodo.py),,no,no,ok,465,analisis-extraccion-commons-collections-4.6.0-20261013-205130.log
 2026-10-13T21:20:46,extraccion-commons-io,commons-io,2.22.0,c14acc16f73e44a75b2062b17aacb26c4feda746,(administrado por complejidad_por_metodo.py),,no,no,ok,338,analisis-extraccion-commons-io-2.22.0-20261013-212046.log
+2026-11-18T11:38:08,propio-poo2025,poo2025,2026-03-13,cbccd2676cc7335dd0c863dced2d9af3c3ba253a,Sonar way comprehensive,,no,no,ok,3521,analisis-propio-poo2025-2026-03-13-20261118-113808.log

@@ -39,6 +39,10 @@ DIR_LABORATORIO = RAIZ / "laboratorio"
 ARCHIVO_COMPOSE = DIR_LABORATORIO / "docker-compose.yml"
 ARCHIVO_ENV = DIR_LABORATORIO / ".env"
 ARCHIVO_CORPUS = RAIZ / "corpus" / "corpus.csv"
+ARCHIVO_PROPIO = RAIZ / "corpus" / "proyecto-propio.csv"
+"""Proyecto propio del grupo (sección 5.4). Va aparte del corpus congelado para que
+los guiones que recorren el corpus completo (correr_corpus.py, extraer_eje2.py) no lo
+incluyan: solo se analiza a pedido, con analizar.py."""
 DIR_DATOS = RAIZ / "datos"
 
 DIR_TRABAJO = RAIZ / "trabajo"
@@ -115,24 +119,41 @@ class VersionCorpus:
     repositorio: str
     tag: str
     commit: str
+    # Carpeta del módulo Maven dentro del repositorio. Vacía en el corpus (el pom
+    # está en la raíz); en el proyecto propio el backend está en "poo2025/".
+    subdirectorio: str = ""
+    # "corpus" o "propio": decide la clave por defecto en analizar.py.
+    origen: str = "corpus"
 
     @property
-    def directorio(self) -> Path:
-        """Carpeta del checkout en la máquina anfitriona."""
+    def directorio_repo(self) -> Path:
+        """Raíz del checkout de git en la máquina anfitriona (donde clona clonar_corpus.py)."""
         return DIR_TRABAJO / self.proyecto / self.version
 
     @property
+    def directorio(self) -> Path:
+        """Carpeta del módulo Maven que se compila y analiza."""
+        base = self.directorio_repo
+        return base / self.subdirectorio if self.subdirectorio else base
+
+    @property
     def directorio_contenedor(self) -> str:
-        """La misma carpeta, vista desde el contenedor de herramientas."""
-        return f"{DIR_TRABAJO_CONTENEDOR}/{self.proyecto}/{self.version}"
+        """La carpeta del módulo, vista desde el contenedor de herramientas."""
+        base = f"{DIR_TRABAJO_CONTENEDOR}/{self.proyecto}/{self.version}"
+        return f"{base}/{self.subdirectorio}" if self.subdirectorio else base
 
     @property
     def url_git(self) -> str:
         return f"https://github.com/{self.repositorio}.git"
 
 
-def leer_corpus(ruta: Path = ARCHIVO_CORPUS) -> list[VersionCorpus]:
-    """Devuelve las versiones del corpus en el orden del archivo."""
+def leer_corpus(ruta: Path = ARCHIVO_CORPUS, origen: str = "corpus") -> list[VersionCorpus]:
+    """Devuelve las versiones de un archivo de corpus en el orden del archivo.
+
+    La columna ``subdirectorio`` es opcional (solo la usa el proyecto propio).
+    """
+    if not ruta.exists():
+        return []
     with ruta.open(encoding="utf-8", newline="") as archivo:
         return [
             VersionCorpus(
@@ -142,17 +163,25 @@ def leer_corpus(ruta: Path = ARCHIVO_CORPUS) -> list[VersionCorpus]:
                 repositorio=fila["repositorio"],
                 tag=fila["tag"],
                 commit=fila["commit"],
+                subdirectorio=(fila.get("subdirectorio") or "").strip("/"),
+                origen=origen,
             )
             for fila in csv.DictReader(archivo)
         ]
 
 
+def leer_proyecto_propio() -> list[VersionCorpus]:
+    """Versiones del proyecto propio (corpus/proyecto-propio.csv)."""
+    return leer_corpus(ARCHIVO_PROPIO, origen="propio")
+
+
 def buscar_version(proyecto: str, version: str) -> VersionCorpus:
-    """Busca una versión del corpus o termina con un mensaje claro."""
-    for item in leer_corpus():
+    """Busca una versión en el corpus o en el proyecto propio, o termina con un mensaje claro."""
+    todas = leer_corpus() + leer_proyecto_propio()
+    for item in todas:
         if item.proyecto == proyecto and item.version == version:
             return item
-    disponibles = ", ".join(f"{v.proyecto} {v.version}" for v in leer_corpus())
+    disponibles = ", ".join(f"{v.proyecto} {v.version}" for v in todas)
     salir(f"No existe '{proyecto} {version}' en el corpus. Disponibles: {disponibles}")
     raise AssertionError  # inalcanzable: salir() termina el proceso
 

@@ -42,6 +42,7 @@ Uso:
     python guiones/analizar.py jsoup 1.22.2 --fecha 2026-01-10
     python guiones/analizar.py commons-io 2.22.0 --jacoco
     python guiones/analizar.py commons-io 2.22.0 --jacoco --perfil core
+    python guiones/analizar.py poo2025 2026-03-13 --sin-tests   # proyecto propio, clave propio-poo2025
 
 Antes de cada análisis se crea el proyecto en SonarQube si no existe y se le
 asigna el perfil (comun.asignar_perfil), salvo en las claves extraccion-*, cuyo
@@ -217,7 +218,16 @@ def main() -> None:
         salir("Falta SONAR_TOKEN en laboratorio/.env. Corré antes preparar_sonarqube.py.")
 
     perfil = PERFILES[args.perfil]
-    clave = args.clave or clave_corpus(version.proyecto, perfil)
+    if args.clave:
+        clave = args.clave
+    elif version.origen == "propio":
+        # El proyecto propio se analiza solo con el perfil principal (D7), bajo su
+        # propia clave, para no mezclarlo con las claves corpus-* del estudio.
+        if perfil != PERFILES["comprehensive"]:
+            salir("El proyecto propio se analiza solo con el perfil principal (comprehensive)")
+        clave = f"propio-{version.proyecto}"
+    else:
+        clave = clave_corpus(version.proyecto, perfil)
     if perfil_esperado(clave) is None:
         perfil = "(administrado por complejidad_por_metodo.py)"
     else:
