@@ -1,0 +1,15 @@
+medida,valor
+n,60
+acuerdo_observado_3,0.35
+kappa_3_categorias,-0.3
+acuerdo_observado_binario,1.0
+kappa_binario_FP,nan
+matriz eric=R brenda=R,9
+matriz eric=R brenda=I,21
+matriz eric=R brenda=FP,0
+matriz eric=I brenda=R,18
+matriz eric=I brenda=I,12
+matriz eric=I brenda=FP,0
+matriz eric=FP brenda=R,0
+matriz eric=FP brenda=I,0
+matriz eric=FP brenda=FP,0

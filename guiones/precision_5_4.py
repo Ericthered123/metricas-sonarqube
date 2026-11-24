@@ -217,8 +217,12 @@ def main() -> None:
 
     escribir_csv(carpeta / "precision-5-4.csv", filas, list(filas[0]))
 
-    info(f"N = {len(claves)}; acuerdo observado {observado:.1%}; kappa (3 categorías) {kappa3:.3f}; "
-         f"kappa binario FP {kappa_bin:.3f}; desacuerdos {len(desacuerdos)}")
+    def texto_kappa(valor: float) -> str:
+        # Kappa no está definido si los dos clasificadores usaron una sola y la misma categoría.
+        return "no definido (los dos usaron una sola categoría)" if math.isnan(valor) else f"{valor:.3f}"
+
+    info(f"N = {len(claves)}; acuerdo observado {observado:.1%}; kappa (3 categorías) {texto_kappa(kappa3)}; "
+         f"acuerdo binario FP {observado_bin:.1%}, kappa {texto_kappa(kappa_bin)}; desacuerdos {len(desacuerdos)}")
     for fila in filas:
         if fila["grupo"] == "total":
             info(f"{fila['origen']}: estricta {fila['precision_estricta']:.1%} "
