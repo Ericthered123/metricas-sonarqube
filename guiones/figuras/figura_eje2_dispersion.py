@@ -33,7 +33,7 @@ RAIZ = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(RAIZ / "guiones"))
 from comun import DIR_DATOS, leer_corpus  # noqa: E402
 
-DESTINO = RAIZ / "resultados" / "figuras" / "fig6_eje2_dispersion.png"
+DESTINO = RAIZ / "resultados" / "figuras" / "fig06_5-2_dispersion_complejidad.png"
 ANCHO_MM, ALTO_MM = 122, 58
 DPI = 800
 
